@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h1>style</h1>
+    <h1>tabletree</h1>
   </div>
 </template>
 <script>
-export default {}
+export default {
+}
 </script>

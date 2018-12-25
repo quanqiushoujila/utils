@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>组件复用</h1>
+    <h1>弹窗</h1>
     <el-button @click="open">打开</el-button>
     <gov-dialog
       @handleSubmit="handleSubmit"

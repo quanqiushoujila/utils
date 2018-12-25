@@ -33,12 +33,12 @@
   </el-dialog>
 </template>
 <script>
-import mixin from './mixin'
 export default {
-  name: 'kDialog',
-  mixins: [mixin],
+  name: 'govDialog',
   data () {
     return {
+      visible: false,
+      btnTypes: ['', 'primary', 'warning', 'info', 'success', 'danger'],
       style: {},
       clientHeight: 250,
     }
