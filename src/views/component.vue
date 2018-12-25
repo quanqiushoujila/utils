@@ -1,0 +1,58 @@
+<template>
+  <div>
+    <h1>组件复用</h1>
+    <el-button @click="open">打开</el-button>
+    <gov-dialog
+      @handleSubmit="handleSubmit"
+      :title="dialog.textMap[status]"
+      :btnGroup="btnGroup"
+      ref="dialog">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="活动名称">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+      </el-form>
+    </gov-dialog>
+  </div>
+</template>
+<script>
+import govDialog from '@/components/govDialog'
+export default {
+  data () {
+    return {
+      form: {
+        name: ''
+      },
+      status: 'create',
+      // 弹窗
+      dialog: {
+        textMap: {
+          create: '创建',
+          update: '编辑',
+          detail: '详情',
+        },
+        visible: false,
+      },
+      btnGroup: [
+        {
+          label: '取 消1',
+          fn: 'handleCancel',
+        },
+        {
+          label: '确 定1',
+          fn: 'handleSubmit',
+        },
+      ]
+    }
+  },
+  components: {govDialog},
+  methods: {
+    open () {
+      this.$refs.dialog.open()
+    },
+    handleSubmit () {
+      this.$refs.dialog.close()
+    }
+  }
+}
+</script>
