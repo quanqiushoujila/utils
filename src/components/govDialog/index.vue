@@ -167,9 +167,9 @@ export default {
   },
 }
 </script>
-<!-- <style lang="scss" scoped>
+<style scoped>
 .dialog-layout {
   margin: -30px -20px;
   padding: 0px 20px;
 }
-</style> -->
+</style>
