@@ -9,7 +9,7 @@
       <template slot-scope="scope" slot="sex">
         <el-tag>{{scope.data.sexForShow}}</el-tag>
       </template>
-    </gov-table-tree>
+      </gov-table-tree>
   </div>
 </template>
 <script>
@@ -24,7 +24,7 @@ export default {
       tableTreeData: [],
       tableTree: {
         tree: {
-          isLazyLoading: false
+          isLazyLoading: true
         },
         isSelection: true,
         props: [
