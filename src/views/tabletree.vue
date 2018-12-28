@@ -9,7 +9,7 @@
       <template slot-scope="scope" slot="sex">
         <el-tag>{{scope.data.sexForShow}}</el-tag>
       </template>
-      </gov-table-tree>
+    </gov-table-tree>
   </div>
 </template>
 <script>

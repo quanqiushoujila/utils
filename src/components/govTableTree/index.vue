@@ -104,6 +104,7 @@
 </template>
 <script>
 import {mergeWith, isBoolean, isString, isNumber} from 'lodash'
+import $axios from './ajax'
 export default {
   name: 'govTableTree',
   props: {
@@ -147,7 +148,7 @@ export default {
           // 是否懒加载
           isLazyLoading: false,
           url: '',
-          type: 'get'
+          method: 'get'
         },
         // 加载中
         loading: false,
@@ -271,7 +272,7 @@ export default {
     },
     // 当用户手动勾选数据行的 Checkbox 时触发的事件
     handleSelect (val, row) {
-
+      this.$emit('handleSelect', val, row)
     },
     // 当全选时发生变化时会触发该事件
     handleSelectAll (val) {
@@ -313,16 +314,24 @@ export default {
     // 切换子级
     toggleHandle (row, index) {
       let isLazyLoading = this.table.tree.isLazyLoading
-      let expaneded = this.getDefaultPropsName('expaneded')
       if (isLazyLoading) {
-        // let exist = this.hasData(row.id)
-
-      } else {
-        if (!row[expaneded]) {
-          this.tableTreeChildrenOpen(row.id)
+        if (this.hasData(row.id)) {
+          console.log('true')
+          this.dataExist(row)
         } else {
-          this.tableTreeChildrenClose(row.id)
+          console.log('false')
         }
+      } else {
+        this.dataExist(row)
+      }
+    },
+    // 数据已存在操作
+    dataExist (row) {
+      let expaneded = this.getDefaultPropsName('expaneded')
+      if (!row[expaneded]) {
+        this.tableTreeChildrenOpen(row.id)
+      } else {
+        this.tableTreeChildrenClose(row.id)
       }
     },
     // 判断数据是否已经存在
@@ -376,6 +385,20 @@ export default {
     // 按钮事件
     handleOperation (item, row, index) {
       this.$emit(item.fn, row, index)
+    },
+    // 获取ajax数据
+    getData () {
+      handleAjax().then(({data}) => {
+        console.log('data', data)
+      })
+    },
+    // 请求
+    handleAjax (params) {
+      return $axios({
+        url: this.table.tree.url,
+        method: this.table.tree.method || 'get',
+        params: params
+      })
     }
   }
 }
