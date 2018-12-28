@@ -2,6 +2,7 @@
   <div>
     <h1>tabletree</h1>
     <gov-table-tree
+      :data="tableTreeData"
       @handleDetail="handleDetail"
       @handleUpdate="handleUpdate"
       :tableTree="tableTree">
@@ -13,16 +14,21 @@
 </template>
 <script>
 import govTableTree from '@/components/govTableTree'
+import tableTreeData from './model/tableTree'
+import {setTableTreeData} from '@/utils/tableTree'
+
 export default {
   components: {govTableTree},
   data () {
     return {
+      tableTreeData: [],
       tableTree: {
-        data: [
-          {id: 1, name: '张三', sex: '1', address: '北京', hobby: ['1', '2']},
-          {id: 2, name: '小红', sex: '2', address: '北京', hobby: ['3']},
-        ],
+        tree: {
+          isLazyLoading: false
+        },
+        isSelection: true,
         props: [
+          {label: 'id', prop: 'id', width: '50px'},
           {label: '姓名', prop: 'name', treeKey: true},
           {label: '性别', prop: 'sex', template: true, type: 'dic', dicData: [{value: '1', label: '男'}, {value: '2', label: '女'}]},
           {label: '爱好', prop: 'hobby', type: 'dic', dicData: [{value: '1', label: '足球'}, {value: '2', label: '篮球'}, {value: '3', label: '舞蹈'}]},
@@ -37,7 +43,13 @@ export default {
       }
     }
   },
+  created () {
+    this.getList()
+  },
   methods: {
+    getList () {
+      this.tableTreeData = setTableTreeData({data: tableTreeData})
+    },
     handleDetail (row) {
       console.log('详情', row)
     },

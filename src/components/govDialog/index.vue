@@ -144,8 +144,10 @@ export default {
     },
     // 设置body高度
     setDialogHeight () {
-      const documentClientHeight = document.documentElement['clientHeight']
-      // const height = this.$refs.dialogBody['clientHeight']
+      const documentClientHeight = document.documentElement.clientHeight
+      if (!this.$refs.dialogBody) {
+        return
+      }
       const otherHeight = 150 + this.top.replace('vh', '') * documentClientHeight / 100
       const bodyHeight = this.$refs.dialogBody.clientHeight
       if (documentClientHeight - otherHeight <= bodyHeight ) {

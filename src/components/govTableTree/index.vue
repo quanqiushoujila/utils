@@ -2,44 +2,41 @@
   <div class="gov-table-tree">
     <el-table
       ref="tableTree"
-      :data="table.data"
+      :data="data"
       @row-click="handleRowClick"
       @select="handleSelect"
       @select-all="handleSelectAll"
       @selection-change="handleSelectionChange"
       @cell-click="handleCellClick"
       :span-method="spanMethodHandle"
-      v-loading="table.loading ? table.loading : false"
+      v-loading="table.loading"
       style="width: 100%"
       :row-style="tableRowStyle"
       :row-class-name="tableRowClassName"
       :stripe="table.stripe ? table.stripe : true"
       :size="table.size ? table.size : 'medium'"
-      :show-header="table.showHeader ? table.showHeader : true">
+      :show-header="table.showHeader">
       <el-table-column
-        v-if="table.isSelection == null ? true : table.isSelection"
+        v-if="table.isSelection"
         type="selection"
         width="55">
       </el-table-column>
       <template v-for="item in table.props">
-        <template v-if="item.treeKey && table.isTree">
+        <template v-if="item.treeKey">
           <el-table-column
             :label="item.label"
             :width="item.width ? item.width : ''"
             :prop="item.prop || ''">
             <template slot-scope="scope">
-              <!-- <span
-                @click.prevent="toggleHandle(scope.row, scope.$index)"
-                :style="childStyles(scope.row)">
+              <span :style="childStyles(scope.row)"></span>
+              <template v-if="scope.row[table.defaultProps.hasChild]">
                 <i
-                  :class="iconClasses(scope.row)"
-                  :style="iconStyles(scope.row)"></i>
-                {{ scope.row[item.prop] }}
-              </span> -->
-              <i
-                @click.prevent="toggleHandle(scope.row, scope.$index)"
-                class="icon-toggle"
-                :class="iconClasses(scope.row)"></i>
+                  @click.prevent="toggleHandle(scope.row, scope.$index)"
+                  v-if="!loading"
+                  class="icon-toggle"
+                  :class="iconClasses(scope.row)"></i>
+                <i :class="icon.loading" v-else></i>
+              </template>
               {{ scope.row[item.prop] }}
             </template>
           </el-table-column>
@@ -91,7 +88,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination" v-show="table.data.length > 0" v-if="table.pagination.isPagination">
+    <div class="pagination" v-show="data.length > 0" v-if="table.pagination.isPagination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -122,30 +119,36 @@ export default {
         return {}
       }
     },
-    defaultProps: {
-      type: Object,
+    data: {
+      type: Array,
       default () {
-        return {}
+        return []
       }
-    },
+    }
   },
   data () {
     return {
-      defaultProps_: {
-        expanded: '_expanded',
-        level: '_level',
-        show: '_show',
-        children: 'children'
-      },
+      loading: false,
       icon: {
         right: 'el-icon-caret-right',
         bottom: 'el-icon-caret-bottom',
         loading: 'el-icon-loading'
       },
       table: {
-        isTree: true,
-        // 数据
-        data: [],
+        defaultProps: {
+          expaneded: '_expaneded',
+          level: '_level',
+          show: '_show',
+          children: 'children',
+          parentId: 'parentId',
+          hasChild: 'hasChild'
+        },
+        tree: {
+          // 是否懒加载
+          isLazyLoading: false,
+          url: '',
+          type: 'get'
+        },
         // 加载中
         loading: false,
         // 字典props
@@ -189,13 +192,6 @@ export default {
     }
   },
   watch: {
-    defaultProps: {
-      handler (newVal) {
-        this.defaultProps_ = mergeWith(newVal, this.defaultProps_)
-      },
-      deep: true,
-      immediate: true
-    },
     tableTree: {
       handler (newVal) {
         this.table = mergeWith(this.table, newVal)
@@ -204,28 +200,18 @@ export default {
       },
       deep: true,
       immediate: true
-    },
-    'table.isTree': {
-      handler (newVal) {
-        if (newVal) {
-          let data = Object.assign({}, this.table.data)
-        }
-      },
-      deep: true
     }
   },
   methods: {
+    getDefaultPropsName (name) {
+      return this.table.defaultProps[name]
+    },
     childStyles (row) {
-      return { 'padding-left': (row[this.level] > 1 ? row[this.level] * 7 : 0) + 'px' }
+      const level = this.getDefaultPropsName('level')
+      return { 'padding-left': (row[level] > 1 ? row[level] * 14 : 0) + 'px' }
     },
     iconClasses (row) {
-      return !row[this.expanded] ? this.icon.right : this.icon.bottom
-    },
-    iconStyles (row) {
-      return { 'visibility': this.hasChild(row) ? 'visible' : 'hidden' }
-    },
-    hasChild (row) {
-      return (isArray(row[this.childKey]) && row[this.childKey].length >= 1) || false
+      return !row[this.getDefaultPropsName('expaneded')] ? this.icon.right : this.icon.bottom
     },
     // 自定义数据
     templateData (data, row) {
@@ -308,11 +294,9 @@ export default {
     },
     // 行的 style 的回调方法，
     tableRowStyle ({row, rowIndex}) {
-      if (this.table.tree || (this.table.tree && this.table.tree.hasTree)) {
-        let show = !isBoolean(row[this.show]) ? 1 : (row[this.show] ? 1 : 0)
-        row[this.show] = !!show
-        return show ? '' : 'display:none;'
-      }
+      // console.log(row)
+      let show = this.getDefaultPropsName('show')
+      return row[show] ? '' : 'display:none;'
     },
     // 为 Table 中的某一行添加 classname
     tableRowClassName ({row, rowIndex}) {
@@ -328,7 +312,66 @@ export default {
     },
     // 切换子级
     toggleHandle (row, index) {
+      let isLazyLoading = this.table.tree.isLazyLoading
+      let expaneded = this.getDefaultPropsName('expaneded')
+      if (isLazyLoading) {
+        // let exist = this.hasData(row.id)
 
+      } else {
+        if (!row[expaneded]) {
+          this.tableTreeChildrenOpen(row.id)
+        } else {
+          this.tableTreeChildrenClose(row.id)
+        }
+      }
+    },
+    // 判断数据是否已经存在
+    hasData (id) {
+      let data = this.data
+      let parentId = this.getDefaultPropsName('parentId')
+      let exist = data.findIndex(item => {
+        return item[parentId] === id
+      })
+      return !!exist
+    },
+    // 打开子级
+    tableTreeChildrenOpen (id) {
+      let data = this.data
+      let parentId = this.getDefaultPropsName('parentId')
+      let expaneded = this.getDefaultPropsName('expaneded')
+      let show = this.getDefaultPropsName('show')
+      for (let i = 0, len = data.length; i < len; i++) {
+        if (data[i].id === id) {
+          this.$set(data[i], expaneded, true)
+        }
+        if (data[i][parentId] === id) {
+          this.$set(data[i], show, true)
+        }
+      }
+    },
+    // 关闭子级
+    tableTreeChildrenClose (id) {
+      let arr = []
+      let parentId = this.getDefaultPropsName('parentId')
+      let hasChild = this.getDefaultPropsName('hasChild')
+      let expaneded = this.getDefaultPropsName('expaneded')
+      let show = this.getDefaultPropsName('show')
+      arr.push(id)
+      let data = this.data
+      for (let i = 0, len = data.length; i < len; i++) {
+        if (id === data[i].id) {
+          this.$set(data[i], expaneded, false)
+        }
+        if (arr.indexOf(data[i][parentId]) > -1) {
+          this.$set(data[i], expaneded, false)
+          this.$set(data[i], show, false)
+          if (data[i][hasChild]) {
+            if (arr.indexOf(data[i].id) === -1) {
+              arr.push(data[i].id)
+            }
+          }
+        }
+      }
     },
     // 按钮事件
     handleOperation (item, row, index) {
