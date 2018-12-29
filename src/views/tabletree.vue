@@ -14,7 +14,7 @@
 </template>
 <script>
 import govTableTree from '@/components/govTableTree'
-import tableTreeData from './model/tableTree'
+import tableTreeDataLazy from './model/tableTreeLazy'
 import {setTableTreeData} from '@/utils/tableTree'
 
 export default {
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getList () {
-      this.tableTreeData = setTableTreeData({data: tableTreeData})
+      this.tableTreeData = setTableTreeData({data: tableTreeDataLazy})
     },
     handleDetail (row) {
       console.log('详情', row)
