@@ -25,6 +25,7 @@
         <template v-if="item.treeKey">
           <el-table-column
             :label="item.label"
+            :key="item.prop"
             :width="item.width ? item.width : ''"
             :prop="item.prop || ''">
             <template slot-scope="scope">
@@ -103,7 +104,7 @@
   </div>
 </template>
 <script>
-import {mergeWith, isBoolean, isString, isNumber} from 'lodash'
+import {mergeWith, isBoolean} from 'lodash'
 import $axios from './js/ajax'
 import {setTableTreeData, realData, getTemplateData} from './js/util'
 export default {
