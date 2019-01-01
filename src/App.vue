@@ -1,11 +1,5 @@
 <template>
   <div id="app">
-    <div class="app-contailer">
-      <router-link to="/">首页</router-link>
-      <router-link to="/tabletree">tabletree</router-link>
-      <router-link to="/dialog">dialog</router-link>
-      <router-link to="/detail">detail</router-link>
-    </div>
     <router-view/>
   </div>
 </template>

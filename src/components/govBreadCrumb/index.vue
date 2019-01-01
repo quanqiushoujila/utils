@@ -1,6 +1,29 @@
 <template>
-  <div>bread-crumb</div>
+  <el-breadcrumb separator="/">
+    <!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item> -->
+    <el-breadcrumb-item v-for="item in links" :key="item.path" :to="item.path">{{item.meta.label}}</el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 <script>
-export default {}
+export default {
+  name: 'govBreadCrumb',
+  data () {
+    return {
+      links: []
+    }
+  },
+  created () {
+    this.getBreadcrumb()
+  },
+  watch: {
+    $route () {
+      this.getBreadcrumb()
+    }
+  },
+  methods: {
+    getBreadcrumb () {
+      this.links = this.$route.matched
+    }
+  }
+}
 </script>

@@ -35,7 +35,7 @@
           :loading="item.loading"
           v-if="item.show == null ? true : item.show"
           :disabled="item.disabled == null ? false : item.disabled"
-          @click="handleClick(item.fn, loading)">
+          @click="handleClick(item.fn, item.loading)">
           {{item.label}}
         </el-button>
       </template>

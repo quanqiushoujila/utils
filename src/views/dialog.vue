@@ -5,7 +5,6 @@
     <gov-dialog
       @handleSubmit="handleSubmit"
       :title="dialog.textMap[status]"
-      :btnGroup="btnGroup"
       ref="dialog">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="活动名称">
@@ -32,17 +31,7 @@ export default {
           detail: '详情'
         },
         visible: false
-      },
-      btnGroup: [
-        {
-          label: '取 消1',
-          fn: 'handleCancel'
-        },
-        {
-          label: '确 定1',
-          fn: 'handleSubmit'
-        }
-      ]
+      }
     }
   },
   components: {govDialog},
