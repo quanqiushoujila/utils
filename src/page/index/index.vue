@@ -1,10 +1,11 @@
 <template>
   <div class="main">
-    <div>
+    <div class="link-wrapper">
       <router-link to="/">首页</router-link>
       <router-link to="/tabletree">tabletree</router-link>
-      <router-link to="/dialog">dialog</router-link>
-      <router-link to="/detail">detail</router-link>
+      <router-link to="/dialog">弹窗</router-link>
+      <router-link to="/detail">详情</router-link>
+      <router-link to="/tinymce">富文本</router-link>
     </div>
     <gov-bread-crumb></gov-bread-crumb>
     <router-view/>
@@ -17,7 +18,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .main {
+  .main .link-wrapper {
     text-align: center;
   }
 </style>
