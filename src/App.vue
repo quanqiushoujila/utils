@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <router-link to="/">首页</router-link>
-    <router-link to="/tabletree">tabletree</router-link>
-    <router-link to="/dialog">dialog</router-link>
+    <div class="app-contailer">
+      <router-link to="/">首页</router-link>
+      <router-link to="/tabletree">tabletree</router-link>
+      <router-link to="/dialog">dialog</router-link>
+      <router-link to="/detail">detail</router-link>
+    </div>
     <router-view/>
   </div>
 </template>
@@ -14,7 +17,10 @@ export default {
 </script>
 
 <style>
-#app {
+h1 {
+  text-align: center;
+}
+#app .app-contailer {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

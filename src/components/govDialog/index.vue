@@ -1,112 +1,149 @@
 <template>
   <el-dialog
     @open="handleOpenDialog"
+    @opened="handleOpenedDialog"
     @close="handleCloseDialog"
     @closed="handleClosedDialog"
-    :append-to-body="appendToBody"
-    :close-on-press-escape="false"
-    :close-on-click-modal="false"
-    :title="title"
-    :lock-scroll="lockScroll"
-    :fullscreen="fullscreen"
-    :visible.sync="visible"
     :top="top"
-    :width="width">
+    :title="title"
+    :width="width"
+    :modal="modal"
+    :center="center"
+    :lock-scroll="true"
+    :show-close="showClose"
+    :visible.sync="visible"
+    :fullscreen="fullscreen"
+    :custom-class="customClass"
+    :modal-append-to-body="true"
+    :close-on-click-modal="false"
+    :append-to-body="appendToBody"
+    :close-on-press-escape="false">
+    <!-- body start -->
     <div class="dialog-layout" :style="style">
       <div ref="dialogBody">
         <slot></slot>
       </div>
     </div>
+    <!-- body end -->
+    <!-- footer start -->
     <div slot="footer" class="dialog-footer" v-if="isBtnGroup">
-      <template v-for="(item, index) in btnGroups">
+      <template v-for="item in btnGroups">
         <el-button
-          v-if="item.show == null ? true : item.show"
           :key="item.label"
+          :type="item.type"
+          :size="item.size || ''"
           :loading="item.loading"
-          :type="item.type || btnTypes[index]"
+          v-if="item.show == null ? true : item.show"
           :disabled="item.disabled == null ? false : item.disabled"
-          @click="clickHandle(item.fn, item.loading)">
+          @click="handleClick(item.fn, loading)">
           {{item.label}}
         </el-button>
       </template>
     </div>
+    <!-- footer end -->
   </el-dialog>
 </template>
+
 <script>
 export default {
-  name: 'govDialog',
-  data () {
+  name: 'GovDialog',
+  data() {
     return {
-      visible: false,
-      btnTypes: ['', 'primary', 'warning', 'info', 'success', 'danger'],
-      style: {},
+      visible: false, // 控制弹窗的隐藏显示
       clientHeight: 250,
+      style: {},
     }
   },
   computed: {
+    // 按钮组
     btnGroups () {
       if (this.btnGroup.length > 0) {
         return this.btnGroup
+      } else {
+        return [
+          {
+            label: '取 消',
+            type: 'default',
+            fn: 'handleCancel',
+          },
+          {
+            label: '保 存',
+            type: 'primary',
+            fn: 'handleSubmit',
+          },
+        ]
       }
-      return [
-        {
-          label: '取 消',
-          fn: 'handleCancel',
-        },
-        {
-          label: '确 定',
-          fn: 'handleSubmit',
-        },
-      ]
+
     },
   },
   props: {
-    top: {
-      type: String,
-      default: '15vh',
-    },
     // 是否在 Dialog 出现时将 body 滚动锁定
     lockScroll: {
       type: Boolean,
       default: true,
     },
-    // 是否全屏
+    // 弹窗标题
+    title: {
+      type: String,
+      default: '无标题弹窗',
+    },
+    // 弹窗宽度
+    width: {
+      type: String,
+      default: '50%',
+    },
+    /**
+     *  [{
+     *    label: '确认',
+     *    fn: 'confirmHandle',
+     *    show: true,
+     *    type: 'primary',
+     *    disabled: false,
+     *    loading: false,
+     *  }]
+    */
+    btnGroup: {
+      type: Array,
+      default: ()=>[],
+    },
+    // 是否全屏弹窗
     fullscreen: {
       type: Boolean,
       default: false,
     },
-    // 是否显示按钮组
-    isBtnGroup: {
+    // 距离顶部距离
+    top: {
+      type: String,
+      default: '15vh',
+    },
+    // 是否显示遮罩
+    modal: {
       type: Boolean,
       default: true,
     },
-    /**
-      [{
-        label: '确认',
-        fn: 'confirmHandle',
-        show: true,
-        type: 'primary',
-        disabled: false,
-        loading: false,
-      }]
-    */
-    btnGroup: {
-      type: Array,
-      default () {
-        return []
-      },
-    },
+    // 是否插入到body元素
     appendToBody: {
       type: Boolean,
       default: true,
     },
-    width: {
+    // 传入的类名
+    customClass: {
       type: String,
-      dafault: '50%',
+      default: '',
     },
-    title: {
-      type: String,
-      default: '标题',
+    // 是否显示关闭按钮
+    showClose: {
+      type: Boolean,
+      default: true,
+    },
+    // 是否居中对齐
+    center: {
+      type: Boolean,
+      default: false,
+    },
+    isBtnGroup: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
@@ -118,23 +155,6 @@ export default {
     close () {
       this.visible = false
     },
-    // 按钮事件
-    clickHandle (fn, loading) {
-      if (fn === 'handleCancel') {
-        this.$emit(fn, loading)
-        this.close()
-      } else {
-        this.$emit(fn, loading)
-      }
-    },
-    // 关闭后动画过后操作
-    handleClosedDialog () {
-      this.$emit('closed')
-    },
-    // 关闭后操作
-    handleCloseDialog () {
-      this.$emit('close')
-    },
     // 打开后操作
     handleOpenDialog () {
       this.$nextTick(() => {
@@ -142,12 +162,36 @@ export default {
       })
       this.$emit('open')
     },
+    // 打开动画结束后操作
+    handleOpenedDialog () {
+      this.$nextTick(() => {
+        this.resetDocumentClientHeight()
+      })
+      this.$emit('opened')
+    },
+    // 关闭后操作
+    handleCloseDialog () {
+      this.$emit('close')
+    },
+    // 关闭动画结束后操作
+    handleClosedDialog () {
+      this.$emit('closed')
+    },
+    // 按钮事件
+    handleClick (fn, loading) {
+      if (fn === 'handleCancel') {
+        this.$emit(fn, loading)
+        this.close()
+      } else {
+        this.$emit(fn, loading)
+      }
+    },
     // 设置body高度
     setDialogHeight () {
-      const documentClientHeight = document.documentElement.clientHeight
       if (!this.$refs.dialogBody) {
         return
       }
+      const documentClientHeight = document.documentElement['clientHeight']
       const otherHeight = 150 + this.top.replace('vh', '') * documentClientHeight / 100
       const bodyHeight = this.$refs.dialogBody.clientHeight
       if (documentClientHeight - otherHeight <= bodyHeight ) {
@@ -169,9 +213,10 @@ export default {
   },
 }
 </script>
-<style scoped>
-.dialog-layout {
-  margin: -30px -20px;
-  padding: 0px 20px;
-}
+
+<style lang="scss" scoped>
+  .dialog-layout {
+    margin: -30px -20px;
+    padding: 0px 20px;
+  }
 </style>
