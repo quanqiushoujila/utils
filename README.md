@@ -1,4 +1,4 @@
-# test
+# utils
 
 > A Vue.js project
 

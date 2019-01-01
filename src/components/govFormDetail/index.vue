@@ -44,15 +44,15 @@ export default {
       type: Object,
       default () {
         return {}
-      },
+      }
     },
     // 数据
     data: {
       type: Object,
       default () {
         return {}
-      },
-    },
+      }
+    }
   },
   data () {
     return {
@@ -100,7 +100,7 @@ export default {
       let arr = []
       if (Array.isArray(val)) {
         for (let j = 0, len1 = val.length; j < len1; j++) {
-          for(let i = 0, len = dicData.length; i < len; i++) {
+          for (let i = 0, len = dicData.length; i < len; i++) {
             if (val[j] === dicData[i][value]) {
               arr.push(dicData[i][label])
               break
@@ -108,7 +108,7 @@ export default {
           }
         }
       } else {
-        for(let i = 0, len = dicData.length; i < len; i++) {
+        for (let i = 0, len = dicData.length; i < len; i++) {
           if (dicData[i][value] === val) {
             arr.push(dicData[i][label])
             break
@@ -153,12 +153,10 @@ export default {
         }
       }
       return is
-    },
+    }
   }
 }
 </script>
-<style>
-</style>
 <style lang="scss" scoped>
 .detail-container {
   .text-wrapper {

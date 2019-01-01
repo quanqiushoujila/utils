@@ -1,6 +1,6 @@
 // 設置成對應數據
 export function setTableTreeData ({ data = [], level = 1, show = false, expandedName = '_expaneded', levelName = '_level', showName = '_show', childrenName = 'children', parentIdName = 'parentId' }) {
-let arr = []
+  let arr = []
   loop({arr: arr, data: data, level, show, expandedName, levelName, showName, childrenName, parentIdName})
   return arr
 }
@@ -37,13 +37,13 @@ export function isCascader ({dicData = [], childrenName = 'children'}) {
   return is
 }
 // 获取级联数据
-export function getCascader ({valueName = 'value', labelName = 'label', childrenName = 'children', val, dicData = []}) {
+export function getCascader ({ valueName = 'value', labelName = 'label', childrenName = 'children', val, dicData = [] }) {
   let arr = []
-  this.cascaderLoop({arr, val, level: 0, dicData, valueName, labelName, childrenName})
+  cascaderLoop({arr, val, level: 0, dicData, valueName, labelName, childrenName})
   return arr.join('/')
 }
 
-function cascaderLoop({arr, val, level, dicData, valueName, labelName, childrenName}) {
+function cascaderLoop ({arr, val, level, dicData, valueName, labelName, childrenName}) {
   let data = dicData
   for (let i = 0, len = data.length; i < len; i++) {
     if (data[i][valueName] === val[level]) {
@@ -60,7 +60,7 @@ export function getSelectData ({val, dicData, valueName = 'value', labelName = '
   let arr = []
   if (Array.isArray(val)) {
     for (let j = 0, len1 = val.length; j < len1; j++) {
-      for(let i = 0, len = dicData.length; i < len; i++) {
+      for (let i = 0, len = dicData.length; i < len; i++) {
         if (val[j] === dicData[i][valueName]) {
           arr.push(dicData[i][labelName])
           break
@@ -68,7 +68,7 @@ export function getSelectData ({val, dicData, valueName = 'value', labelName = '
       }
     }
   } else {
-    for(let i = 0, len = dicData.length; i < len; i++) {
+    for (let i = 0, len = dicData.length; i < len; i++) {
       if (dicData[i][valueName] === val) {
         arr.push(dicData[i][labelName])
         break

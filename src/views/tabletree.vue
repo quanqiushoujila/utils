@@ -15,7 +15,6 @@
 <script>
 import govTableTree from '@/components/govTableTree'
 import tableTreeDataLazy from './model/tableTree'
-import {setTableTreeData} from '@/utils/tableTree'
 
 export default {
   components: {govTableTree},
@@ -37,7 +36,7 @@ export default {
         operation: {
           props: [
             { label: '详情', fn: 'handleDetail', show: true, permission: '' },
-            { label: '编辑', fn: 'handleUpdate', show: true, permission: '' },
+            { label: '编辑', fn: 'handleUpdate', show: true, permission: '' }
           ]
         }
       }
@@ -55,7 +54,7 @@ export default {
     },
     handleUpdate (row) {
       console.log('编辑', row)
-    },
+    }
   }
 }
 </script>

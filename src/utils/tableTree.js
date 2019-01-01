@@ -7,7 +7,7 @@ export function setTableTreeData ({data = [], expanded = '_expaneded', level = '
 function loop ({arr = [], data = [], index, expanded, level, show, children, parentId}) {
   for (let i = 0, len = data.length; i < len; i++) {
     data[i][level] = index
-    data[i][show] = index === 1 ? true : false
+    data[i][show] = index === 1 ? !!1 : !!0
     data[i][expanded] = false
     let obj = Object.assign({}, data[i])
     delete obj.children

@@ -5,4 +5,3 @@ export const data = {
   address: [2, 2],
   hobby: [1, 2]
 }
-

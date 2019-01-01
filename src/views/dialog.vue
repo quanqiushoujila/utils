@@ -29,19 +29,19 @@ export default {
         textMap: {
           create: '创建',
           update: '编辑',
-          detail: '详情',
+          detail: '详情'
         },
-        visible: false,
+        visible: false
       },
       btnGroup: [
         {
           label: '取 消1',
-          fn: 'handleCancel',
+          fn: 'handleCancel'
         },
         {
           label: '确 定1',
-          fn: 'handleSubmit',
-        },
+          fn: 'handleSubmit'
+        }
       ]
     }
   },

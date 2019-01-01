@@ -180,7 +180,7 @@ export default {
           props: [
             { label: '详情', fn: 'handleDetail', show: true, permission: '' },
             { label: '编辑', fn: 'handleUpdate', show: true, permission: '' },
-            { label: '删除', fn: 'handleDelete', show: true, permission: '' },
+            { label: '删除', fn: 'handleDelete', show: true, permission: '' }
           ]
         },
         // 分页
