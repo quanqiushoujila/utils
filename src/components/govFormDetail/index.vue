@@ -66,11 +66,9 @@ export default {
   methods: {
     // 获取自定义数据
     getTemplateData (val, data) {
-      var obj = {
-        dicData: data.dicData
-      }
+      let obj = Object.assign({}, val)
+      obj.dicData = data.dicData
       const prop = data.prop
-      obj[prop] = val[prop]
       obj[`${prop}ForShow`] = this.realData(val, data)
       return obj
     },

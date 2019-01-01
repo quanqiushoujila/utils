@@ -2,7 +2,7 @@
   <div class="gov-table-tree">
     <el-table
       ref="tableTree"
-      :data="data"
+      :data="tableData"
       @row-click="handleRowClick"
       @select="handleSelect"
       @select-all="handleSelectAll"
@@ -51,7 +51,7 @@
             :min-width="item.minWidth ? item.minWidth : ''"
             :width="item.width ? item.width : ''">
             <template slot-scope="scope">
-              <slot :name="item.prop" :data="templateData(item, scope.row)"></slot>
+              <slot :name="item.prop" :data="templateData(scope.row, item)"></slot>
             </template>
           </el-table-column>
         </template>
@@ -63,7 +63,7 @@
             :width="item.width ? item.width : ''"
             :label="item.label">
             <template slot-scope="scope">
-              {{ item.type === 'dic' ? getDicValue(item, scope.row[item.prop]) : scope.row[item.prop] }}
+              {{getDicValue(scope.row, item)}}
             </template>
           </el-table-column>
         </template>
@@ -88,7 +88,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination" v-show="data.length > 0" v-if="table.pagination.isPagination">
+    <div class="pagination" v-show="tableData.length > 0" v-if="table.pagination.isPagination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -100,13 +100,12 @@
         :total="table.pagination.total ? table.pagination.total : 0">
       </el-pagination>
     </div>
-    {{data}}
   </div>
 </template>
 <script>
 import {mergeWith, isBoolean, isString, isNumber} from 'lodash'
 import $axios from './js/ajax'
-import setTableTreeData from './js/util'
+import {setTableTreeData, realData, getTemplateData} from './js/util'
 export default {
   name: 'govTableTree',
   props: {
@@ -126,6 +125,7 @@ export default {
   },
   data () {
     return {
+      tableData: [],
       loading: false,
       icon: {
         right: 'el-icon-caret-right',
@@ -195,6 +195,13 @@ export default {
     }
   },
   watch: {
+    data: {
+      handler (newVal) {
+        this.tableData = setTableTreeData({data: newVal})
+      },
+      deep: true,
+      immediate: true
+    },
     option: {
       handler (newVal) {
         this.table = mergeWith(this.table, newVal)
@@ -217,12 +224,8 @@ export default {
       return !row[this.getDefaultPropsName('expaneded')] ? this.icon.right : this.icon.bottom
     },
     // 自定义数据
-    templateData (data, row) {
-      let result = Object.assign({}, row)
-      if (data.type === 'dic') {
-        result[`${data.prop}ForShow`] = this.getDicValue(data, row[data.prop])
-      }
-      return result
+    templateData (val, data) {
+      return getTemplateData({val, data: data || []})
     },
     // 按钮是否拥有权限
     hasPermission (val) {
@@ -232,18 +235,8 @@ export default {
       return true
     },
     // 通过字典获取值
-    getDicValue (data, row) {
-      let values = ''
-      if (data.inputType === 'cascader') {
-
-      } else {
-        if (Array.isArray(row)) {
-          values = this.filterData(data.dicData, row)
-        } else if (isString(row) || isNumber(row)) {
-          values = this.filterData(data.dicData, [row])
-        }
-      }
-      return values
+    getDicValue (val, data) {
+      return realData({val, data: data || []})
     },
     // 过滤数据
     filterData (data, row) {
@@ -320,15 +313,13 @@ export default {
       let expaneded = this.getDefaultPropsName('expaneded')
       if (isLazyLoading) {
         if (this.hasData(row.id)) {
-          console.log('true')
+          // console.log('true')
           this.dataExist(row)
         } else {
-          console.log('false')
+          // console.log('false')
           this.$set(row, loading, true)
           this.$set(row, expaneded, true)
-          setTimeout(() => {
-            this.getData(row, index)
-          }, 1000)
+          this.getData(row, index)
         }
       } else {
         this.dataExist(row)
@@ -345,7 +336,7 @@ export default {
     },
     // 判断数据是否已经存在
     hasData (id) {
-      let data = this.data
+      let data = this.tableData
       let parentId = this.getDefaultPropsName('parentId')
       let exist = data.findIndex(item => {
         return item[parentId] === id
@@ -354,7 +345,7 @@ export default {
     },
     // 打开子级
     tableTreeChildrenOpen (id) {
-      let data = this.data
+      let data = this.tableData
       let parentId = this.getDefaultPropsName('parentId')
       let expaneded = this.getDefaultPropsName('expaneded')
       let show = this.getDefaultPropsName('show')
@@ -375,7 +366,7 @@ export default {
       let expaneded = this.getDefaultPropsName('expaneded')
       let show = this.getDefaultPropsName('show')
       arr.push(id)
-      let data = this.data
+      let data = this.tableData
       for (let i = 0, len = data.length; i < len; i++) {
         if (id === data[i].id) {
           this.$set(data[i], expaneded, false)
@@ -405,7 +396,7 @@ export default {
           let res = setTableTreeData({data: data[dataName], level: row[level] + 1, show: true})
           let len = res.length
           for (let i = len - 1; i >= 0; i--) {
-            this.data.splice(1 + index, 0, res[i])
+            this.tableData.splice(1 + index, 0, res[i])
           }
         }
         row[loading] = false
@@ -413,39 +404,39 @@ export default {
     },
     // 请求
     handleAjax (params) {
-      const data1 = {
-        code: 0,
-        data: [
-          { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
-          { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
-          { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
-        ]
-      }
-      const data2 = {
-        code: 0,
-        data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false}]
-      }
-      const data11 = {
-        code: 0,
-        data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false}]
-      }
-      return new Promise((resolve, reject) => {
-        let data = []
-        if (`data${params.id}` === 'data1') {
-          data = data1
-        } else if (`data${params.id}` === 'data2') {
-          data = data2
-        } else if (`data${params.id}` === 'data11') {
-          data = data11
-        }
-        resolve({data})
-      })
-
-      // return $axios({
-      //   url: this.table.tree.url,
-      //   method: this.table.tree.method || 'get',
-      //   params: params
+      // const data1 = {
+      //   code: 0,
+      //   data: [
+      //     { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
+      //     { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
+      //     { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
+      //   ]
+      // }
+      // const data2 = {
+      //   code: 0,
+      //   data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false}]
+      // }
+      // const data11 = {
+      //   code: 0,
+      //   data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false}]
+      // }
+      // return new Promise((resolve, reject) => {
+      //   let data = []
+      //   if (`data${params.id}` === 'data1') {
+      //     data = data1
+      //   } else if (`data${params.id}` === 'data2') {
+      //     data = data2
+      //   } else if (`data${params.id}` === 'data11') {
+      //     data = data11
+      //   }
+      //   resolve({data})
       // })
+
+      return $axios({
+        url: this.table.tree.url,
+        method: this.table.tree.method || 'get',
+        params: params
+      })
     }
   }
 }
