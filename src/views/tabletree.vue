@@ -5,7 +5,7 @@
       :data="tableTreeData"
       @handleDetail="handleDetail"
       @handleUpdate="handleUpdate"
-      :tableTree="tableTree">
+      :option="tableTree">
       <template slot-scope="scope" slot="sex">
         <el-tag>{{scope.data.sexForShow}}</el-tag>
       </template>

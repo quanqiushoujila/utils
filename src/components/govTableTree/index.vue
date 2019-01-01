@@ -32,7 +32,7 @@
               <template v-if="scope.row[table.defaultProps.hasChild]">
                 <i
                   @click.prevent="toggleHandle(scope.row, scope.$index)"
-                  v-if="!loading"
+                  v-if="!scope.row[getDefaultPropsName('loading')]"
                   class="icon-toggle"
                   :class="iconClasses(scope.row)"></i>
                 <i :class="icon.loading" v-else></i>
@@ -100,21 +100,18 @@
         :total="table.pagination.total ? table.pagination.total : 0">
       </el-pagination>
     </div>
+    {{data}}
   </div>
 </template>
 <script>
 import {mergeWith, isBoolean, isString, isNumber} from 'lodash'
-import $axios from './ajax'
+import $axios from './js/ajax'
+import setTableTreeData from './js/util'
 export default {
   name: 'govTableTree',
   props: {
-    // 是否懒加载
-    isLazyLoading: {
-      type: Boolean,
-      default: false,
-    },
     // 数据
-    tableTree: {
+    option: {
       type: Object,
       default () {
         return {}
@@ -136,10 +133,15 @@ export default {
         loading: 'el-icon-loading'
       },
       table: {
+        tableParam: {
+          total: 'total',
+          data: 'data'
+        },
         defaultProps: {
           expaneded: '_expaneded',
           level: '_level',
           show: '_show',
+          loading: '_loading',
           children: 'children',
           parentId: 'parentId',
           hasChild: 'hasChild'
@@ -193,7 +195,7 @@ export default {
     }
   },
   watch: {
-    tableTree: {
+    option: {
       handler (newVal) {
         this.table = mergeWith(this.table, newVal)
         const props = newVal.operation.props && Array.isArray(newVal.operation.props) ? newVal.operation.props : this.table.operation.props
@@ -314,12 +316,19 @@ export default {
     // 切换子级
     toggleHandle (row, index) {
       let isLazyLoading = this.table.tree.isLazyLoading
+      let loading = this.getDefaultPropsName('loading')
+      let expaneded = this.getDefaultPropsName('expaneded')
       if (isLazyLoading) {
         if (this.hasData(row.id)) {
           console.log('true')
           this.dataExist(row)
         } else {
           console.log('false')
+          this.$set(row, loading, true)
+          this.$set(row, expaneded, true)
+          setTimeout(() => {
+            this.getData(row, index)
+          }, 1000)
         }
       } else {
         this.dataExist(row)
@@ -341,7 +350,7 @@ export default {
       let exist = data.findIndex(item => {
         return item[parentId] === id
       })
-      return !!exist
+      return exist > -1
     },
     // 打开子级
     tableTreeChildrenOpen (id) {
@@ -387,18 +396,56 @@ export default {
       this.$emit(item.fn, row, index)
     },
     // 获取ajax数据
-    getData () {
-      handleAjax().then(({data}) => {
-        console.log('data', data)
+    getData (row, index) {
+      let dataName = this.table.tableParam.data
+      let loading = this.getDefaultPropsName('loading')
+      let level = this.getDefaultPropsName('level')
+      this.handleAjax({id: row.id}).then(({data}) => {
+        if (data.code === 0) {
+          let res = setTableTreeData({data: data[dataName], level: row[level] + 1, show: true})
+          let len = res.length
+          for (let i = len - 1; i >= 0; i--) {
+            this.data.splice(1 + index, 0, res[i])
+          }
+        }
+        row[loading] = false
       })
     },
     // 请求
     handleAjax (params) {
-      return $axios({
-        url: this.table.tree.url,
-        method: this.table.tree.method || 'get',
-        params: params
+      const data1 = {
+        code: 0,
+        data: [
+          { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
+          { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
+          { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
+        ]
+      }
+      const data2 = {
+        code: 0,
+        data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false}]
+      }
+      const data11 = {
+        code: 0,
+        data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false}]
+      }
+      return new Promise((resolve, reject) => {
+        let data = []
+        if (`data${params.id}` === 'data1') {
+          data = data1
+        } else if (`data${params.id}` === 'data2') {
+          data = data2
+        } else if (`data${params.id}` === 'data11') {
+          data = data11
+        }
+        resolve({data})
       })
+
+      // return $axios({
+      //   url: this.table.tree.url,
+      //   method: this.table.tree.method || 'get',
+      //   params: params
+      // })
     }
   }
 }
