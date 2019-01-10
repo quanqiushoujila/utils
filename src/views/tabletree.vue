@@ -23,7 +23,7 @@ export default {
       tableTreeData: [],
       tableTree: {
         tree: {
-          isLazyLoading: false
+          isLazyLoading: true
         },
         isSelection: true,
         props: [

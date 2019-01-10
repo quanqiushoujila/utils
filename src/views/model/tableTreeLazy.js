@@ -6,7 +6,7 @@ export default [
     sex: '1',
     address: '北京',
     hobby: ['1', '2'],
-    hasChild: true,
+    hasChild: true
   },
   {
     id: 2,

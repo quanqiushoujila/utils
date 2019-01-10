@@ -1,21 +1,26 @@
 // 設置成對應數據
-export function setTableTreeData ({ data = [], level = 1, show = false, expandedName = '_expaneded', levelName = '_level', showName = '_show', childrenName = 'children', parentIdName = 'parentId' }) {
+export function setTableTreeData ({ data = [], level = 1, show = false, expanded = false, expandedName = '_expaneded', levelName = '_level', showName = '_show', childrenName = 'children', parentIdName = 'parentId' }) {
   let arr = []
-  loop({arr: arr, data: data, level, show, expandedName, levelName, showName, childrenName, parentIdName})
+  console.log('expanded', expanded)
+  loop({arr: arr, data: data, level, show, expanded, expandedName, levelName, showName, childrenName, parentIdName})
   return arr
 }
 
-function loop ({arr = [], data = [], level, show, expandedName, levelName, showName, childrenName, parentIdName}) {
+function loop ({arr = [], data = [], level, show, expanded, expandedName, levelName, showName, childrenName, parentIdName}) {
   for (let i = 0, len = data.length; i < len; i++) {
     data[i][levelName] = level
-    data[i][showName] = level === 1 ? true : (show || false)
-    data[i][expandedName] = false
+    if (expanded) {
+      data[i][showName] = expanded
+    } else {
+      data[i][showName] = level === 1 ? true : (show || false)
+    }
+    data[i][expandedName] = expanded || false
     let obj = Object.assign({}, data[i])
     delete obj[childrenName]
     arr.push(obj)
     let child = data[i][childrenName]
     if (child && child.length > 0) {
-      loop({arr, data: child, level: level + 1, expandedName, levelName, showName, childrenName, parentIdName})
+      loop({arr, data: child, level: level + 1, expanded, expandedName, levelName, showName, childrenName, parentIdName})
     }
   }
 }

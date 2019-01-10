@@ -3,6 +3,7 @@
     <el-table
       ref="tableTree"
       :data="tableData"
+      :border="table.border"
       @row-click="handleRowClick"
       @select="handleSelect"
       @select-all="handleSelectAll"
@@ -17,6 +18,11 @@
       :size="table.size ? table.size : 'medium'"
       :show-header="table.showHeader">
       <el-table-column
+        v-if="table.isIndex"
+        type="index">
+      </el-table-column>
+      <el-table-column
+        :selectable="handleSelectable"
         v-if="table.isSelection"
         type="selection"
         width="55">
@@ -105,7 +111,7 @@
 </template>
 <script>
 import {mergeWith, isBoolean} from 'lodash'
-import $axios from './js/ajax'
+// import $axios from './js/ajax'
 import {setTableTreeData, realData, getTemplateData} from './js/util'
 export default {
   name: 'govTableTree',
@@ -126,6 +132,8 @@ export default {
   },
   data () {
     return {
+      refName: 'tableTree',
+      isIndex: false,
       tableData: [],
       loading: false,
       icon: {
@@ -134,9 +142,15 @@ export default {
         loading: 'el-icon-loading'
       },
       table: {
+        border: true,
         tableParam: {
           total: 'total',
           data: 'data'
+        },
+        checkedAll: false,
+        expanded: false,
+        toggleCheckbox: function (row, index) {
+          return true
         },
         defaultProps: {
           expaneded: '_expaneded',
@@ -198,7 +212,11 @@ export default {
   watch: {
     data: {
       handler (newVal) {
-        this.tableData = setTableTreeData({data: newVal})
+        this.tableData = setTableTreeData({data: newVal, expanded: this.table.expanded})
+        console.log('this.tableData', this.tableData)
+        if (this.table.checkedAll) {
+          this.handleSelection(this.tableData)
+        }
       },
       deep: true,
       immediate: true
@@ -214,6 +232,22 @@ export default {
     }
   },
   methods: {
+    // 选中
+    handleSelection (rows) {
+      this.$nextTick(() => {
+        rows.forEach(row => {
+          this.$refs[this.refName].toggleRowSelection(row)
+        })
+      })
+    },
+    // 清空选中
+    clearSelection () {
+      this.$refs[this.refName].clearSelection()
+    },
+    // 这一行的 CheckBox 是否可以勾选
+    handleSelectable (row, index) {
+      return this.table.toggleCheckbox(row, index)
+    },
     getDefaultPropsName (name) {
       return this.table.defaultProps[name]
     },
@@ -268,22 +302,22 @@ export default {
     },
     // 当用户手动勾选数据行的 Checkbox 时触发的事件
     handleSelect (val, row) {
-      this.$emit('handleSelect', val, row)
+      this.$emit('select', val, row)
     },
     // 当全选时发生变化时会触发该事件
     handleSelectAll (val) {
-      this.$emit('handleSelectAll', val)
+      this.$emit('selectAll', val)
     },
     // 当选择项发生变化时会触发该事件
     handleSelectionChange (val) {
       let ids = val.map((item) => {
         return item.id
       })
-      this.$emit('handleSelectionChange', ids, val)
+      this.$emit('selectionChange', ids, val)
     },
     // 当某个单元格被点击时会触发该事件
     handleCellClick (row, column, cell, event) {
-      this.$emit('handleCellClick', row, column, cell, event)
+      this.$emit('cellClick', row, column, cell, event)
     },
     // 合并单元格
     spanMethodHandle ({ row, column, rowIndex, columnIndex }) {
@@ -405,39 +439,41 @@ export default {
     },
     // 请求
     handleAjax (params) {
-      // const data1 = {
-      //   code: 0,
-      //   data: [
-      //     { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
-      //     { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
-      //     { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
-      //   ]
-      // }
-      // const data2 = {
-      //   code: 0,
-      //   data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false}]
-      // }
-      // const data11 = {
-      //   code: 0,
-      //   data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false}]
-      // }
-      // return new Promise((resolve, reject) => {
-      //   let data = []
-      //   if (`data${params.id}` === 'data1') {
-      //     data = data1
-      //   } else if (`data${params.id}` === 'data2') {
-      //     data = data2
-      //   } else if (`data${params.id}` === 'data11') {
-      //     data = data11
-      //   }
-      //   resolve({data})
-      // })
-
-      return $axios({
-        url: this.table.tree.url,
-        method: this.table.tree.method || 'get',
-        params: params
+      const data1 = {
+        code: 0,
+        data: [
+          { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
+          { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
+          { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
+        ]
+      }
+      const data2 = {
+        code: 0,
+        data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false }]
+      }
+      const data11 = {
+        code: 0,
+        data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false }]
+      }
+      return new Promise((resolve, reject) => {
+        let data = []
+        if (`data${params.id}` === 'data1') {
+          data = data1
+        } else if (`data${params.id}` === 'data2') {
+          data = data2
+        } else if (`data${params.id}` === 'data11') {
+          data = data11
+        }
+        setTimeout(() => {
+          resolve({data})
+        }, 1000)
       })
+
+      // return $axios({
+      //   url: this.table.tree.url,
+      //   method: this.table.tree.method || 'get',
+      //   params: params
+      // })
     }
   }
 }
