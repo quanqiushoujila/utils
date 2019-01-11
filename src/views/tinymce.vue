@@ -1,5 +1,9 @@
 <template>
-  <tinymce :height="300" v-model="content"/>
+  <div>
+    <tinymce :height="300" v-model="content"/>
+    <div v-html="content">
+    </div>
+  </div>
 </template>
 <script>
 import tinymce from '@/components/tinymce'
