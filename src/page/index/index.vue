@@ -6,6 +6,7 @@
       <router-link to="/dialog">弹窗</router-link>
       <router-link to="/detail">详情</router-link>
       <router-link to="/tinymce">富文本</router-link>
+      <router-link to="/pdf">pdf</router-link>
     </div>
     <gov-bread-crumb></gov-bread-crumb>
     <router-view/>
@@ -14,7 +15,12 @@
 <script>
 import govBreadCrumb from '@/components/govBreadCrumb/index'
 export default {
-  components: {govBreadCrumb}
+  components: {govBreadCrumb},
+  watch: {
+    $router (newVal) {
+      console.log('newVal', newVal)
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
