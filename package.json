@@ -11,11 +11,18 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@antv/data-set": "^0.10.1",
+    "@smallwei/avue": "^1.5.0",
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.11",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
+    "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
+    "qs": "^6.6.0",
+    "viser-vue": "^2.4.4",
     "vue": "^2.5.2",
     "vue-pdf": "^4.0.5",
     "vue-router": "^3.0.1",

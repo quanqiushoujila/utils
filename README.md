@@ -1,6 +1,7 @@
 # utils
 
-> A Vue.js project
+## 技术栈
+vue + vuex + vue-router + ES6/7  + sass + echarts + [element-ui](http://element.eleme.io/#/zh-CN) + js-cookie + axios + [avue](https://avue.top/) + [lodash](https://www.lodashjs.com/docs/4.17.5.html) + [viser-vue](https://viserjs.github.io)
 
 ## Build Setup
 

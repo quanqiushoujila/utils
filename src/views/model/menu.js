@@ -53,8 +53,41 @@ export default [
   },
   {
     id: 3,
-    label: '其他',
+    label: 'viser',
     name: 'nav3',
-    path: '/index'
+    path: '',
+    children: [
+      {
+        id: 31,
+        label: '柱状图',
+        name: 'bar',
+        children: [
+          {
+            id: 311,
+            label: '基础柱状图',
+            name: 'basicColumn',
+            path: '/viser/bar/basicColumn'
+          },
+          {
+            id: 312,
+            label: '分组柱状图',
+            name: 'groupedColumn',
+            path: '/viser/bar/groupedColumn'
+          },
+          {
+            id: 313,
+            label: '基础条形图',
+            name: 'basicBar',
+            path: '/viser/bar/basicBar'
+          },
+          {
+            id: 314,
+            label: '分组条形图',
+            name: 'groupedBar',
+            path: '/viser/bar/groupedBar'
+          }
+        ]
+      }
+    ]
   }
 ]
