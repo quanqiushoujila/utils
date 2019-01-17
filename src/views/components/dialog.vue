@@ -15,8 +15,9 @@
   </div>
 </template>
 <script>
-import govDialog from '@/components/govDialog'
+import GovDialog from '@/components/GovDialog'
 export default {
+  components: {GovDialog},
   data () {
     return {
       form: {
@@ -34,7 +35,6 @@ export default {
       }
     }
   },
-  components: {govDialog},
   methods: {
     open () {
       this.$refs.dialog.open()

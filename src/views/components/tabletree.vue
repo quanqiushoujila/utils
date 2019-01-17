@@ -13,11 +13,11 @@
   </div>
 </template>
 <script>
-import govTableTree from '@/components/govTableTree'
-import tableTreeDataLazy from './model/tableTree'
+import GovTableTree from '@/components/GovTableTree'
+import tableTreeDataLazy from '@/assets/data/tableTree'
 
 export default {
-  components: {govTableTree},
+  components: {GovTableTree},
   data () {
     return {
       tableTreeData: [],

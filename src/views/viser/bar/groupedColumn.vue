@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import groupedColumn from '@/components/viser/bar/groupedColumn'
+import GroupedColumn from '@/components/Viser/Bar/groupedColumn'
 
 export default {
   data () {
@@ -19,7 +19,7 @@ export default {
       }
     }
   },
-  components: {groupedColumn},
+  components: {GroupedColumn},
   created () {
     this.loading()
   },

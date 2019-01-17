@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import groupedBar from '@/components/viser/bar/groupedBar'
+import GroupedBar from '@/components/Viser/Bar/groupedBar'
 export default {
   data () {
     return {
@@ -17,7 +17,7 @@ export default {
       }
     }
   },
-  components: {groupedBar},
+  components: {GroupedBar},
   created () {
     this.init()
   },

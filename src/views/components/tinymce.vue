@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-import tinymce from '@/components/tinymce'
+import Tinymce from '@/components/Tinymce'
 export default {
-  components: {tinymce},
+  components: {Tinymce},
   data () {
     return {
       content:

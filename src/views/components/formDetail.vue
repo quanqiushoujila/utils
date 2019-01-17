@@ -12,10 +12,10 @@
   </div>
 </template>
 <script>
-import govFormDetail from '@/components/govFormDetail'
-import {data} from './model/formDetail'
+import GovFormDetail from '@/components/GovFormDetail'
+import {data} from '@/assets/data/formDetail'
 export default {
-  components: {govFormDetail},
+  components: {GovFormDetail},
   data () {
     return {
       option: {

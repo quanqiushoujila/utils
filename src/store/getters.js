@@ -1,8 +1,11 @@
 const getters = {
   // 主题
   theme: state => state.common.theme,
-  // 部门
-  department:  state => state.common.department,
+  // 菜单是否置顶
+  isTopMenu: state => state.common.isTopMenu,
+  // 是否显示面包屑导航
+  isShowBreakCrumb: state => state.common.isShowBreakCrumb,
+
   // 字典
   dictionary: state => state.user.dictionary,
   access_token: state => state.user.access_token,
@@ -15,9 +18,13 @@ const getters = {
   currentMenu: state => state.user.currentMenu,
   // 所有菜单
   menu: state => state.user.menu,
-  // 当前活动的菜单
-  activeMenu: state => state.user.activeMenu,
-  // 当前活动的主菜单
-  activeMainMenu: state => state.user.activeMainMenu
+  // 部门
+  department: state => state.user.department,
+
+  // tabs菜单
+  visitedViews: state => state.tags.visitedViews,
+  // 当前活动tabs菜单
+  activedViews: state => state.tags.activedViews
+
 }
 export default getters

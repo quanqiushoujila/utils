@@ -1,13 +1,13 @@
 <template>
   <div>
     <a :href="url" target="_blank">pdf</a>
-    <govpdf :url="url"/>
+    <pdf :url="url"/>
   </div>
 </template>
 <script>
-import govpdf from '@/components/pdf'
+import Pdf from '@/components/Pdf'
 export default {
-  components: {govpdf},
+  components: {Pdf},
   data () {
     return {
       url: './static/20190107150817_1d76b7b7g2.pdf'

@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import basicColumn from '@/components/viser/bar/basicColumn'
+import BasicColumn from '@/components/Viser/Bar/basicColumn'
 export default {
   name: 'viser',
   data () {
@@ -17,7 +17,7 @@ export default {
       }
     }
   },
-  components: {basicColumn},
+  components: {BasicColumn},
   mounted () {
     this.init()
   },

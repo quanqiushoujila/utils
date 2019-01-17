@@ -36,7 +36,7 @@ export const getStorage = ({name, type}) => {
   } else if (obj.dataType === 'number') {
     content = Number(obj.content)
   } else if (obj.dataType === 'boolean') {
-    content = eval(obj.content)
+    content = !!obj.content
   } else if (obj.dataType === 'object') {
     content = obj.content
   }
@@ -45,13 +45,13 @@ export const getStorage = ({name, type}) => {
 /**
  * 存储LocalStorage
  */
-export const setLocalStorage = (name, content) => {
+export const setLocalStorage = ({name, content}) => {
   setStorage({name, type: 'localStorage', content})
 }
 /**
  * 存储sessionstorage
  */
-export const setSessionStorag = (name, content) => {
+export const setSessionStorag = ({name, content}) => {
   setStorage({name, type: 'sessionStorage', content})
 }
 /**
@@ -61,13 +61,13 @@ export const setStorage = (params) => {
   const {
     name,
     content,
-    type,
+    type
   } = params
   const obj = {
     dataType: typeof (content),
     content: content,
     type: type,
-    datetime: +new Date(),
+    datetime: +new Date()
   }
   if (type) window.sessionStorage.setItem(name, JSON.stringify(obj))
   else window.localStorage.setItem(name, JSON.stringify(obj))
@@ -87,7 +87,7 @@ export const clearSessionStorage = () => {
 /**
  * 清空全部storage
  */
-export const clearStorage = ({type: 'session'}) => {
+export const clearStorage = ({type = 'sessionStorage'}) => {
   if (type === 'sessionStorage') {
     window.sessionStorage.clear()
     return

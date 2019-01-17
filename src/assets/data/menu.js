@@ -29,25 +29,25 @@ export default [
         id: 21,
         label: 'tabletree',
         name: 'tabletree',
-        path: '/tabletree'
+        path: '/components/tabletree'
       },
       {
         id: 22,
         label: '弹窗',
         name: 'dialog',
-        path: '/dialog'
+        path: '/components/dialog'
       },
       {
         id: 23,
         label: '详情',
         name: 'detail',
-        path: '/detail'
+        path: '/components/detail'
       },
       {
         id: 24,
         label: '富文本',
         name: 'tinymce',
-        path: '/tinymce'
+        path: '/components/tinymce'
       }
     ]
   },

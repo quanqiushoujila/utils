@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import basicBar from '@/components/viser/bar/basicBar'
+import BasicBar from '@/components/Viser/Bar/basicBar'
 export default {
   data () {
     return {
@@ -19,7 +19,7 @@ export default {
       }
     }
   },
-  components: {basicBar},
+  components: {BasicBar},
   created () {
     this.init()
   },

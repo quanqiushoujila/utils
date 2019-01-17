@@ -1,30 +1,32 @@
 <template>
   <aside class="menu-wrapper" :style="{'background-color': backgroundColor, 'height': `calc(100vh - ${+outerHeight}px)`}">
-    <el-menu
-      class="menu"
-      v-if="data.length > 0"
-      :unique-opened="uniqueOpened"
-      :router="router"
-      :collapse-transition="collapseTransition"
-      :mode="mode"
-      :collapse="isCollapse"
-      :background-color="backgroundColor"
-      :text-color="textColor"
-      :active-text-color="activeTextColor"
-      :default-active="defaultActive">
-      <sub-menu
-        @goto-route="handleGotoRoute"
-        v-for="menu in data"
-        :key="menu.id"
-        :data="menu">
-      </sub-menu>
-    </el-menu>
+    <el-scrollbar>
+      <el-menu
+        class="menu"
+        v-if="data.length > 0"
+        :unique-opened="uniqueOpened"
+        :router="router"
+        :collapse-transition="collapseTransition"
+        :mode="mode"
+        :collapse="isCollapse"
+        :background-color="backgroundColor"
+        :text-color="textColor"
+        :active-text-color="activeTextColor"
+        :default-active="defaultActive">
+        <sub-menu
+          @goto-route="handleGotoRoute"
+          v-for="menu in data"
+          :key="menu.id"
+          :data="menu">
+        </sub-menu>
+      </el-menu>
+    </el-scrollbar>
   </aside>
 </template>
 <script>
 import subMenu from './subMenu'
 export default {
-  name: 'menu',
+  name: 'Kmenu',
   components: {subMenu},
   props: {
     // 是否只保持一个子菜单的展开

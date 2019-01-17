@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import basicLine from '@/components/viser/line/basicLine'
+import BasicLine from '@/components/Viser/Line/basicLine'
 export default {
   data () {
     return {
@@ -16,7 +16,7 @@ export default {
       }
     }
   },
-  components: {basicLine},
+  components: {BasicLine},
   created () {
     this.init()
   },
