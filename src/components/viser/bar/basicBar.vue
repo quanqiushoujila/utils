@@ -1,3 +1,4 @@
+<!-- 基础条形图 -->
 <template>
   <div>
     <v-chart :forceFit="true" :height="height" :data="sourceData">

@@ -18,14 +18,14 @@
       :size="table.size ? table.size : 'medium'"
       :show-header="table.showHeader">
       <el-table-column
-        v-if="table.isIndex"
-        type="index">
-      </el-table-column>
-      <el-table-column
         :selectable="handleSelectable"
         v-if="table.isSelection"
         type="selection"
         width="55">
+      </el-table-column>
+      <el-table-column
+        v-if="table.isIndex"
+        type="index">
       </el-table-column>
       <template v-for="item in table.props">
         <template v-if="item.treeKey">

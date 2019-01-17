@@ -87,6 +87,102 @@ export default [
             path: '/viser/bar/groupedBar'
           }
         ]
+      },
+      {
+        id: 32,
+        label: '线性图',
+        name: 'line',
+        children: [
+          {
+            id: 321,
+            label: '基础折线图',
+            name: 'basicLine',
+            path: '/viser/line/basicLine'
+          },
+          {
+            id: 322,
+            label: '多条折线图',
+            name: 'multiLine',
+            path: '/viser/line/multiLine'
+          },
+          {
+            id: 323,
+            label: '曲线折线图',
+            name: 'multiSmoothLine',
+            path: '/viser/line/multiSmoothLine'
+          }
+        ]
+      },
+      {
+        id: 33,
+        label: '饼图',
+        name: 'pie',
+        children: [
+          {
+            id: 331,
+            label: '基础环形',
+            name: 'basicDonut',
+            path: '/viser/pie/basicDonut'
+          },
+          {
+            id: 332,
+            label: '基础饼型',
+            name: 'basicPie',
+            path: '/viser/pie/basicPie'
+          },
+          {
+            id: 333,
+            label: '饼型-内部文字',
+            name: 'innerLabelPie',
+            path: '/viser/pie/innerLabelPie'
+          }
+        ]
+      },
+      {
+        id: 34,
+        label: '地图',
+        name: 'map',
+        children: [
+          {
+            id: 341,
+            label: '中国省地图',
+            name: 'chinaMapProvince',
+            path: '/viser/map/chinaMapProvince'
+          }
+        ]
+      },
+      {
+        id: 35,
+        label: '其他',
+        name: 'common',
+        children: [
+          {
+            id: 351,
+            label: '字符云',
+            name: 'wordCloud',
+            path: '/viser/common/wordCloud'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    label: 'echarts',
+    name: 'echarts',
+    children: [
+      {
+        id: 41,
+        label: '折线图',
+        name: 'line',
+        children: [
+          {
+            id: 411,
+            label: '折线图',
+            name: 'lineMarker',
+            path: '/echarts/line/lineMarker'
+          }
+        ]
       }
     ]
   }

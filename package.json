@@ -15,7 +15,7 @@
     "@smallwei/avue": "^1.5.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
-    "echarts": "^4.2.0-rc.2",
+    "echarts": "^4.1.0",
     "element-ui": "^2.4.11",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
