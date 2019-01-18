@@ -8,7 +8,6 @@
 import Chart from '@/components/echarts/line/lineMarker'
 
 export default {
-  name: 'LineChart',
   components: { Chart }
 }
 </script>

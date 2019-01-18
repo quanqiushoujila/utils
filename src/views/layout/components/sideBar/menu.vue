@@ -1,5 +1,6 @@
 <template>
   <k-menu
+    :outerHeight="outerHeight"
     @goto-route="handleGotoRoute"
     :data="data">
   </k-menu>
@@ -12,6 +13,12 @@ export default {
   data () {
     return {
       data: menuData
+    }
+  },
+  props: {
+    outerHeight: {
+      type: Number,
+      default: 0
     }
   },
   methods: {

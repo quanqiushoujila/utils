@@ -20,7 +20,7 @@ export default new Router({
   mode: 'history',
   routes: [
     { path: '/', redirect: '/home' },
-    { path: '/home', name: 'home', redirect: '/tabletree', meta: {label: '首页'}, component: Home, children: children },
+    { path: '/home', name: 'home', redirect: '/components/tabletree', meta: {label: '首页'}, component: Home, children: children },
     { path: '*', redirect: '/home' }
   ]
 })

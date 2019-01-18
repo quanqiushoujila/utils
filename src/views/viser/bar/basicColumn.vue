@@ -7,7 +7,6 @@
 <script>
 import BasicColumn from '@/components/Viser/Bar/basicColumn'
 export default {
-  name: 'viser',
   data () {
     return {
       data: [],

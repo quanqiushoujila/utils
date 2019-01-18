@@ -3,7 +3,7 @@ import {setLocalStorage, getLocalStotage} from '@/utils/storage'
 const common = {
   state: {
     // 菜单是否置顶
-    isTopMenu: getLocalStotage('isTopMenu') || false,
+    isTopMenu: getLocalStotage('isTopMenu') || true,
     // 是否显示面包屑导航
     isShowBreakCrumb: getLocalStotage('isShowBreakCrumb') || true,
     // 主题
