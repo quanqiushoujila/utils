@@ -27,6 +27,9 @@ function loop ({arr = [], data = [], level, show, expanded, expandedName, levelN
 
 // 判断是否是级联数据
 export function isCascader ({dicData = [], childrenName = 'children'}) {
+  if (dicData && dicData.length === 0) {
+    return false
+  }
   let is = false
   for (let i = 0, len = dicData.length; i < len; i++) {
     if (is) {
@@ -44,7 +47,9 @@ export function isCascader ({dicData = [], childrenName = 'children'}) {
 // 获取级联数据
 export function getCascader ({ valueName = 'value', labelName = 'label', childrenName = 'children', val, dicData = [] }) {
   let arr = []
-  cascaderLoop({arr, val, level: 0, dicData, valueName, labelName, childrenName})
+  if (dicData && dicData.length > 0) {
+    cascaderLoop({arr, val, level: 0, dicData, valueName, labelName, childrenName})
+  }
   return arr.join('/')
 }
 
@@ -55,7 +60,7 @@ function cascaderLoop ({arr, val, level, dicData, valueName, labelName, children
       arr.push(data[i][labelName])
       let children = data[i][childrenName]
       if (children && children.length > 0) {
-        cascaderLoop({arr, val, level: level + 1, data: children, valueName, labelName, childrenName})
+        cascaderLoop({arr, val, level: level + 1, dicData: children, valueName, labelName, childrenName})
       }
     }
   }
@@ -92,12 +97,12 @@ export function getTemplateData ({val, data = []}) {
 }
 
 // 获取字典真实数据
-export function realData ({val, data, valueName = 'value', labelName = 'label'}) {
+export function realData ({val, data, valueName = 'value', labelName = 'label', childrenName = 'children'}) {
   const prop = data.prop
   if (data.type === 'dic') {
     if (data.dicData) {
-      if (isCascader(val, data)) {
-        return getCascader({val: val[prop], dicData: data.dicData, valueName, labelName})
+      if (isCascader({dicData: data.dicData})) {
+        return getCascader({val: val[prop], dicData: data.dicData, valueName, labelName, childrenName})
       } else {
         return getSelectData({val: val[prop], dicData: data.dicData, valueName, labelName})
       }

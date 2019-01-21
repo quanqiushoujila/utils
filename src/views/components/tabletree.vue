@@ -3,13 +3,22 @@
     <h1>tabletree</h1>
     <gov-table-tree
       :data="tableTreeData"
+      @selectionChange="handleSelectionChange"
       @handleDetail="handleDetail"
       @handleUpdate="handleUpdate"
       :option="tableTree">
       <template slot-scope="scope" slot="sex">
-        <el-tag>{{scope.data.sexForShow}}</el-tag>
+        <el-tag>{{scope.row.sexForShow}}</el-tag>
       </template>
-      </gov-table-tree>
+      <template slot-scope="scope" slot="operation">
+        <el-button
+          size="small"
+          type="text"
+          @click="handleDetail(scope.row.row, scope.row.$index)">
+          详情
+        </el-button>
+      </template>
+    </gov-table-tree>
   </div>
 </template>
 <script>
@@ -34,9 +43,10 @@ export default {
           {label: '住址', prop: 'address', type: 'dic', dicData: [{value: '1', label: '北京', children: [{value: '11', label: '四环'}]}, {value: '2', label: '江苏', children: [{value: '21', label: '南京'}, {value: '22', label: '泰州'}]}]}
         ],
         operation: {
+          slot: false,
           props: [
-            { label: '详情', fn: 'handleDetail', show: true, permission: '' },
-            { label: '编辑', fn: 'handleUpdate', show: true, permission: '' }
+            { label: '详情', fn: 'handleDetail', permission: '', callback: function (row) { return row.id !== 1 } },
+            { label: '编辑', fn: 'handleUpdate', show: true, permission: true }
           ]
         }
       }
@@ -47,13 +57,21 @@ export default {
   },
   methods: {
     getList () {
-      this.tableTreeData = tableTreeDataLazy
+      setTimeout(() => {
+        this.tableTreeData = tableTreeDataLazy
+      })
+    },
+    handleDetail1 (row) {
+      console.log('详情1', row)
     },
     handleDetail (row) {
       console.log('详情', row)
     },
     handleUpdate (row) {
       console.log('编辑', row)
+    },
+    handleSelectionChange (row, data) {
+      console.log(row, data)
     }
   }
 }

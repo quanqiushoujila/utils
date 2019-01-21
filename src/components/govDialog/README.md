@@ -1,8 +1,9 @@
-## 数据基因 通用弹窗
+## 通用弹窗
 
 ### 基础用法
 
 > 基础弹窗
+
 ``` html
   <gov-dialog
     ref="mainDialog"

@@ -13,7 +13,7 @@ export default [
         parentId: 1,
         name: '张小黄',
         sex: '2',
-        address: '北京',
+        address: ['1', '12'],
         hasChild: false,
         hobby: ['1']
       },
@@ -67,5 +67,13 @@ export default [
         hasChild: false
       }
     ]
+  },
+  {
+    id: 3,
+    parentId: '',
+    name: '小红2',
+    sex: '2',
+    address: ['2', '21'],
+    hobby: ['3']
   }
 ]

@@ -58,7 +58,7 @@
             :min-width="item.minWidth ? item.minWidth : ''"
             :width="item.width ? item.width : ''">
             <template slot-scope="scope">
-              <slot :name="item.prop" :data="templateData(scope.row, item)"></slot>
+              <slot :name="item.prop" :row="templateData(scope.row, item)"></slot>
             </template>
           </el-table-column>
         </template>
@@ -76,26 +76,31 @@
         </template>
       </template>
       <el-table-column
-        v-if="table.operation && (table.operation.isOperation == null ? true : table.operation.isOperation)"
+        v-if="table.operation && (table.operation.show == null ? true : table.operation.show)"
         fixed="right"
         :label="table.operation.label"
         :width="table.operation.width ? table.operation.width : ''">
         <template slot-scope="scope">
-          <template v-for="item in table.operation.props">
-            <el-button
-               v-if="(item.show == null ? true : item.show)"
-              :key="item.label"
-              size="small"
-              :type="table.operation.type ? table.operation.type : 'text'"
-              @click="handleOperation(item, scope.row, scope.$index)">
-              {{item.label}}
-            </el-button>
+          <template v-if="table.operation.slot">
+            <slot name="operation" :row="operationData(scope.row, scope.$index)"></slot>
+          </template>
+          <template v-else>
+            <template v-for="item in table.operation.props">
+              <el-button
+                 v-if="isShowButton(item, scope.row)"
+                :key="item.label"
+                size="small"
+                :type="table.operation.type ? table.operation.type : 'text'"
+                @click="handleOperation(item, scope.row, scope.$index)">
+                {{item.label}}
+              </el-button>
+            </template>
           </template>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination" v-show="tableData.length > 0" v-if="table.pagination.isPagination">
+    <div class="pagination" v-show="tableData.length > 0" v-if="table.pagination.show">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -111,7 +116,7 @@
 </template>
 <script>
 import {mergeWith, isBoolean} from 'lodash'
-// import $axios from './js/ajax'
+import $axios from 'axios'
 import {setTableTreeData, realData, getTemplateData} from './js/util'
 export default {
   name: 'govTableTree',
@@ -136,6 +141,7 @@ export default {
       isIndex: false,
       tableData: [],
       loading: false,
+      queryData: [],
       icon: {
         right: 'el-icon-caret-right',
         bottom: 'el-icon-caret-bottom',
@@ -148,7 +154,6 @@ export default {
           data: 'data'
         },
         checkedAll: false,
-        expanded: false,
         toggleCheckbox: function (row, index) {
           return true
         },
@@ -162,6 +167,8 @@ export default {
           hasChild: 'hasChild'
         },
         tree: {
+          // 是否展开
+          expanded: false,
           // 是否懒加载
           isLazyLoading: false,
           url: '',
@@ -185,21 +192,22 @@ export default {
         // 是否显示表头
         showHeader: true,
         operation: {
-          isOperation: true,
+          slot: false,
+          show: true,
           // 按钮类型
           // danger-红色 warning-黄色 primary-蓝色 success-绿色 info-灰色 默认-白色
           type: 'text',
           label: '操作',
           width: 200,
           props: [
-            { label: '详情', fn: 'handleDetail', show: true, permission: '' },
-            { label: '编辑', fn: 'handleUpdate', show: true, permission: '' },
-            { label: '删除', fn: 'handleDelete', show: true, permission: '' }
+            { label: '详情', fn: 'handleDetail', show: true, permission: true, callback: function () {} },
+            { label: '编辑', fn: 'handleUpdate', show: true, permission: true, callback: function () {} },
+            { label: '删除', fn: 'handleDelete', show: true, permission: true, callback: function () {} }
           ]
         },
         // 分页
         pagination: {
-          isPagination: true,
+          show: true,
           total: 0,
           currentPage: 1,
           pageSize: 10,
@@ -212,7 +220,7 @@ export default {
   watch: {
     data: {
       handler (newVal) {
-        this.tableData = setTableTreeData({data: newVal, expanded: this.table.expanded})
+        this.tableData = setTableTreeData({data: newVal, expanded: this.table.tree.expanded})
         if (this.table.checkedAll) {
           this.handleSelection(this.tableData)
         }
@@ -231,6 +239,30 @@ export default {
     }
   },
   methods: {
+    // 获取选中数据
+    getQueryData () {
+      this.$set('getQueryData', this.queryData)
+    },
+    // 按钮根据权限判断是否显示
+    isShowButton (data, row) {
+      if (data.show != null) {
+        return data.show
+      }
+      if (isBoolean(data.permission)) {
+        return data.permission
+      }
+      if (data.callback) {
+        return data.callback(row)
+      }
+      return true
+    },
+    // 自定义列表返回数据
+    operationData (row, index) {
+      return {
+        row: row,
+        $index: index
+      }
+    },
     // 选中
     handleSelection (rows) {
       this.$nextTick(() => {
@@ -269,6 +301,7 @@ export default {
       return true
     },
     // 通过字典获取值
+    // val当前数据
     getDicValue (val, data) {
       return realData({val, data: data || []})
     },
@@ -438,41 +471,41 @@ export default {
     },
     // 请求
     handleAjax (params) {
-      const data1 = {
-        code: 0,
-        data: [
-          { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
-          { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
-          { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
-        ]
-      }
-      const data2 = {
-        code: 0,
-        data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false }]
-      }
-      const data11 = {
-        code: 0,
-        data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false }]
-      }
-      return new Promise((resolve, reject) => {
-        let data = []
-        if (`data${params.id}` === 'data1') {
-          data = data1
-        } else if (`data${params.id}` === 'data2') {
-          data = data2
-        } else if (`data${params.id}` === 'data11') {
-          data = data11
-        }
-        setTimeout(() => {
-          resolve({data})
-        }, 1000)
-      })
-
-      // return $axios({
-      //   url: this.table.tree.url,
-      //   method: this.table.tree.method || 'get',
-      //   params: params
+      // const data1 = {
+      //   code: 0,
+      //   data: [
+      //     { id: 10, parentId: 1, name: '张小黄', sex: '2', address: '北京', hasChild: false, hobby: ['1'] },
+      //     { id: 11, name: '张小三', parentId: 1, sex: '1', address: '北京', hobby: ['1', '2'], hasChild: true },
+      //     { id: 12, parentId: 1, name: '张小笑', sex: '2', address: '北京', hobby: ['3'], hasChild: false }
+      //   ]
+      // }
+      // const data2 = {
+      //   code: 0,
+      //   data: [{ id: 21, parentId: 2, name: '小小红', sex: '2', address: '北京', hobby: ['3'], hasChild: false }]
+      // }
+      // const data11 = {
+      //   code: 0,
+      //   data: [{ id: 111, parentId: 11, name: '张小小三', sex: '1', address: '北京', hobby: ['1', '2'], hasChild: false }]
+      // }
+      // return new Promise((resolve, reject) => {
+      //   let data = []
+      //   if (`data${params.id}` === 'data1') {
+      //     data = data1
+      //   } else if (`data${params.id}` === 'data2') {
+      //     data = data2
+      //   } else if (`data${params.id}` === 'data11') {
+      //     data = data11
+      //   }
+      //   setTimeout(() => {
+      //     resolve({data})
+      //   }, 1000)
       // })
+
+      return $axios({
+        url: this.table.tree.url,
+        method: this.table.tree.method || 'get',
+        params: params
+      })
     }
   }
 }
