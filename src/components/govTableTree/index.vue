@@ -48,7 +48,7 @@
             </template>
           </el-table-column>
         </template>
-        <template v-else-if="item.template">
+        <template v-else-if="item.slot">
           <el-table-column
             show-overflow-tooltip
             :prop="item.prop || ''"
@@ -213,7 +213,6 @@ export default {
     data: {
       handler (newVal) {
         this.tableData = setTableTreeData({data: newVal, expanded: this.table.expanded})
-        console.log('this.tableData', this.tableData)
         if (this.table.checkedAll) {
           this.handleSelection(this.tableData)
         }

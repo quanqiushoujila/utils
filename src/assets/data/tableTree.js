@@ -4,7 +4,7 @@ export default [
     parentId: '',
     name: '张三',
     sex: '1',
-    address: '北京',
+    address: ['1', '11'],
     hobby: ['1', '2'],
     hasChild: true,
     children: [
@@ -53,7 +53,7 @@ export default [
     parentId: '',
     name: '小红',
     sex: '2',
-    address: '北京',
+    address: ['2', '21'],
     hobby: ['3'],
     hasChild: true,
     children: [
