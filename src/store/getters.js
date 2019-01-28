@@ -24,9 +24,9 @@ const getters = {
   department: state => state.user.department,
 
   // tabs菜单
-  visitedViews: state => state.tags.visitedViews,
+  visitedTabViews: state => state.tags.visitedTabViews,
   // 当前活动tabs菜单
-  activedViews: state => state.tags.activedViews
+  activedTabViews: state => state.tags.activedTabViews
 
 }
 export default getters

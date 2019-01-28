@@ -1,15 +1,15 @@
-import {setLocalStorage, getLocalStotage} from '@/utils/storage'
+import {setLocalStorage, getLocalStorage} from '@/utils/storage'
 
 const common = {
   state: {
     // 菜单是否置顶
-    isTopMenu: getLocalStotage('isTopMenu') || true,
+    isTopMenu: getLocalStorage({name: 'isTopMenu'}) || false,
     // 是否显示面包屑导航
-    isShowBreakCrumb: getLocalStotage('isShowBreakCrumb') || true,
+    isShowBreakCrumb: getLocalStorage({name: 'isShowBreakCrumb'}) || false,
     // 主题
-    theme: getLocalStotage('theme') || '',
+    theme: getLocalStorage({name: 'theme'}) || '',
     // 是否显示tabnav
-    isShowTabNav: getLocalStotage('isShowTabNav') || true
+    isShowTabNav: getLocalStorage({name: 'isShowTabNav'}) || false
   },
   mutations: {
     // 主题

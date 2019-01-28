@@ -1,18 +1,18 @@
 const tags = {
   state: {
     // tabs菜单
-    visitedViews: [],
+    visitedTabViews: [],
     // 当前活动tabs菜单
-    activedViews: []
+    activedTabViews: {}
   },
   mutations: {
     // tabs菜单
-    SET_VISITED_VIEWS: (state, menu) => {
-      this.state.visitedViews = menu
+    SET_VISITED_TAB_VIEWS: (state, menu) => {
+      state.visitedTabViews = menu
     },
     // 当前活动tabs菜单
-    SET_ACTIVED_VIEW: (state, currentActivedMenu) => {
-      this.state.activedViews = currentActivedMenu
+    SET_ACTIVED_TAB_VIEW: (state, currentActivedMenu) => {
+      state.activedTabViews = currentActivedMenu
     }
   }
 }

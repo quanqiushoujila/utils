@@ -2,14 +2,14 @@ import {validateNull} from './validate'
 /**
  * 获取sessionStorage
  */
-export const getSessionStotage = ({name}) => {
-  getStorage({name, type: 'sessionStorage'})
+export const getSessionStorage = ({name}) => {
+  return getStorage({name, type: 'sessionStorage'})
 }
 /**
  * 获取LocalStorage
  */
-export const getLocalStotage = ({name}) => {
-  getStorage({name, type: 'localStorage'})
+export const getLocalStorage = ({name}) => {
+  return getStorage({name, type: 'localStorage'})
 }
 /**
  * 获取storage
@@ -29,7 +29,9 @@ export const getStorage = ({name, type}) => {
       obj = window.sessionStorage.getItem(name)
     }
   }
-  if (validateNull(obj)) return
+  if (validateNull(obj)) {
+    return null
+  }
   obj = JSON.parse(obj)
   if (obj.dataType === 'string') {
     content = obj.content
@@ -40,8 +42,7 @@ export const getStorage = ({name, type}) => {
   } else if (obj.dataType === 'object') {
     content = obj.content
   }
-  console.log(name, content)
-  return JSON.parse(content)
+  return content
 }
 /**
  * 存储LocalStorage
@@ -52,7 +53,7 @@ export const setLocalStorage = ({name, content}) => {
 /**
  * 存储sessionstorage
  */
-export const setSessionStorag = ({name, content}) => {
+export const setSessionStorage = ({name, content}) => {
   setStorage({name, type: 'sessionStorage', content})
 }
 /**

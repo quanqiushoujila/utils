@@ -24,6 +24,7 @@ import Top from './components/top'
 import GovNav from './components/nav'
 import {mapGetters} from 'vuex'
 import config from '@/config'
+import {activedMenu} from '@/utils/menu'
 export default {
   components: {KMenu, GovBreadCrumb, Top, GovNav},
   data () {
@@ -45,17 +46,30 @@ export default {
       return config.layout.menuWidth
     }
   },
+  beforeRouteEnter (to, from, next) {
+    const menu = activedMenu({menu: to})
+    next(vm => {
+      vm.initMenu(menu)
+    })
+  },
   created () {
     this.vMenuWidth = this.menuWidth
+    this.$store.dispatch('GetMenu')
   },
   watch: {
     isTopMenu: {
       handler (newVal) {
-        this.vMenuTop = newVal ? this.topHeight : 0
+        this.vMenuTop = !newVal ? this.topHeight : 0
         this.vMenuWidth = newVal ? 0 : this.menuWidth
       },
       deep: true,
       immediate: true
+    }
+  },
+  methods: {
+    initMenu (menu) {
+      this.$store.commit('SET_ACTIVED_TAB_VIEW', menu)
+      this.$store.commit('SET_VISITED_TAB_VIEWS', [menu])
     }
   }
 }
@@ -68,7 +82,7 @@ export default {
     right: 0;
     bottom: 0;
     overflow: auto;
-    z-index: 10;
+    z-index: 100;
   }
   .right-container {
     .right-top-container {

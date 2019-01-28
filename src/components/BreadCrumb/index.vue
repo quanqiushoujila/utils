@@ -23,7 +23,7 @@ export default {
   methods: {
     getBreadcrumb () {
       this.links = this.$route.matched
-      console.log('matched', this.links)
+      // console.log('matched', this.links)
     }
   }
 }
