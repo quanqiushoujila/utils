@@ -154,7 +154,6 @@ export function downloadExport ({title = '', response}) {
   let contentInfo = contentDispositionAnalysis(response.headers['content-disposition'].replace(/"/g, ""))
   return new Promise((resolve) => {
     let headers = response.headers
-    console.log(response)
     let blob = new Blob([response.data], {
       type: headers['content-type'],
     })

@@ -5,6 +5,8 @@ const getters = {
   isTopMenu: state => state.common.isTopMenu,
   // 是否显示面包屑导航
   isShowBreakCrumb: state => state.common.isShowBreakCrumb,
+  // 是否显示tabnav
+  isShowTabNav: state => state.common.isShowTabNav,
 
   // 字典
   dictionary: state => state.user.dictionary,

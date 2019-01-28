@@ -8,6 +8,7 @@
         <top/>
       </div>
       <div class="right-middle-container">
+        <gov-nav v-if="isShowTabNav"/>
         <gov-bread-crumb class="breadcrumb-contianer" v-if="isShowBreakCrumb"/>
       </div>
       <div class="right-bottom-container">
@@ -18,12 +19,13 @@
 </template>
 <script>
 import KMenu from './components/sideBar/menu'
-import GovBreadCrumb from '@/components/govBreadCrumb'
+import GovBreadCrumb from '@/components/BreadCrumb'
 import Top from './components/top'
+import GovNav from './components/nav'
 import {mapGetters} from 'vuex'
 import config from '@/config'
 export default {
-  components: {KMenu, GovBreadCrumb, Top},
+  components: {KMenu, GovBreadCrumb, Top, GovNav},
   data () {
     return {
       vMenuWidth: 0,
@@ -33,7 +35,8 @@ export default {
   computed: {
     ...mapGetters([
       'isTopMenu',
-      'isShowBreakCrumb'
+      'isShowBreakCrumb',
+      'isShowTabNav'
     ]),
     topHeight () {
       return config.layout.topHeight

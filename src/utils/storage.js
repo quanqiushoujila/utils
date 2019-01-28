@@ -40,6 +40,7 @@ export const getStorage = ({name, type}) => {
   } else if (obj.dataType === 'object') {
     content = obj.content
   }
+  console.log(name, content)
   return JSON.parse(content)
 }
 /**
@@ -69,7 +70,7 @@ export const setStorage = (params) => {
     type: type,
     datetime: +new Date()
   }
-  if (type) window.sessionStorage.setItem(name, JSON.stringify(obj))
+  if (type === 'sessionStorage') window.sessionStorage.setItem(name, JSON.stringify(obj))
   else window.localStorage.setItem(name, JSON.stringify(obj))
 }
 /**

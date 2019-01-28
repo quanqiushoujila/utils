@@ -1,7 +1,6 @@
 // 設置成對應數據
 export function setTableTreeData ({ data = [], level = 1, show = false, expanded = false, expandedName = '_expaneded', levelName = '_level', showName = '_show', childrenName = 'children', parentIdName = 'parentId' }) {
   let arr = []
-  console.log('expanded', expanded)
   loop({arr: arr, data: data, level, show, expanded, expandedName, levelName, showName, childrenName, parentIdName})
   return arr
 }

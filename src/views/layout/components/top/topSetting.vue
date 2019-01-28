@@ -27,7 +27,8 @@ export default {
     return {
       form: {
         isTopMenu: false,
-        isShowBreakCrumb: false
+        isShowBreakCrumb: false,
+        isShowTabNav: false
       },
       settingStatus: false,
       formProps: [
@@ -40,6 +41,11 @@ export default {
           prop: 'isShowBreakCrumb',
           commit: 'SET_IS_SHOW_BREAK_CRUMB',
           label: '面包屑导航'
+        },
+        {
+          prop: 'isShowTabNav',
+          commit: 'SET_IS_SHOW_TAB_NAV',
+          label: '导航条'
         }
       ]
     }
@@ -47,7 +53,8 @@ export default {
   computed: {
     ...mapGetters([
       'isTopMenu',
-      'isShowBreakCrumb'
+      'isShowBreakCrumb',
+      'isShowTabNav'
     ])
   },
   mounted () {
@@ -57,6 +64,7 @@ export default {
     initData () {
       this.form.isTopMenu = this.isTopMenu
       this.form.isShowBreakCrumb = this.isShowBreakCrumb
+      this.form.isShowTabNav = this.isShowTabNav
     },
     handleChange (data, status) {
       this.$store.commit(data.commit, status)
