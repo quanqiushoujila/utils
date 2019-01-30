@@ -2,6 +2,7 @@
   <k-menu
     :outerHeight="outerHeight"
     @goto-route="handleGotoRoute"
+    :defaultActive="activedTabView.name"
     :data="data">
   </k-menu>
 </template>
@@ -25,7 +26,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'visitedTabViews'
+      'visitedTabViews',
+      'activedTabView'
     ])
   },
   methods: {
@@ -36,7 +38,6 @@ export default {
       this.$router.push({path: menu.redirect || menu.path})
     },
     setVisitedTabViews (menu) {
-      console.log('this.visitedTabViews', this.visitedTabViews)
       const index = this.visitedTabViews.findIndex((item) => {
         return item.name === menu.name
       })

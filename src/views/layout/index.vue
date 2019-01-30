@@ -47,6 +47,8 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
+    // console.log(to)
+    // next()
     const menu = activedMenu({menu: to})
     next(vm => {
       vm.initMenu(menu)

@@ -26,7 +26,7 @@ const getters = {
   // tabs菜单
   visitedTabViews: state => state.tags.visitedTabViews,
   // 当前活动tabs菜单
-  activedTabViews: state => state.tags.activedTabViews
+  activedTabView: state => state.tags.activedTabView
 
 }
 export default getters

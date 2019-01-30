@@ -61,7 +61,7 @@ export default {
     },
     // 当前激活菜单的 index
     defaultActive: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     // 菜单的背景色

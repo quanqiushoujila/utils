@@ -1,7 +1,7 @@
 <template>
   <el-submenu
     v-if="data.children && data.children.length > 0"
-    :index="data.id + ''">
+    :index="data.name">
     <template slot="title">
       <i class="iconfont" :class="data.icon" v-if="data.icon"></i>
       <span>{{ data.label }}</span>
@@ -13,7 +13,7 @@
       :data="menu">
     </sub-menu>
   </el-submenu>
-  <el-menu-item v-else :index="data.path" @click="handleGotoRoute(data)">
+  <el-menu-item v-else :index="data.name" @click="handleGotoRoute(data)">
     <i class="iconfont" :class="data.icon" v-if="data.icon"></i>
     <span>{{ data.label }}</span>
   </el-menu-item>

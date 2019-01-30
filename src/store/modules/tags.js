@@ -3,7 +3,7 @@ const tags = {
     // tabs菜单
     visitedTabViews: [],
     // 当前活动tabs菜单
-    activedTabViews: {}
+    activedTabView: {}
   },
   mutations: {
     // tabs菜单
@@ -12,7 +12,7 @@ const tags = {
     },
     // 当前活动tabs菜单
     SET_ACTIVED_TAB_VIEW: (state, currentActivedMenu) => {
-      state.activedTabViews = currentActivedMenu
+      state.activedTabView = currentActivedMenu
     }
   }
 }
