@@ -79,7 +79,10 @@ export default {
     }
   },
   methods: {
-    // 设置label宽度
+    /**
+     * 设置label宽度
+     * data: 当前条数据
+     */
     getLabelWidth (data) {
       let labelWidth = '100px'
       if (this.option.labelWidth) {
@@ -90,7 +93,11 @@ export default {
       }
       return labelWidth
     },
-    // 获取自定义数据
+    /**
+     * 获取自定义数据
+     * val:
+     * data:
+     */
     getTemplateData (val, data) {
       let obj = Object.assign({}, val)
       obj.dicData = data.dicData
@@ -98,11 +105,19 @@ export default {
       obj[`${prop}ForShow`] = this.realData(val, data)
       return obj
     },
-    // 获取默认props
+    /**
+     * 获取默认props
+     * data:
+     * name:
+     */
     getPropsName (data, name) {
       return (data.props && data.props[name]) || this.defaultProps[name]
     },
-    // 获取字典真实数据
+    /**
+     * 获取字典真实数据
+     * val:
+     * data:
+     */
     realData (val, data) {
       const prop = data.prop
       if (data.type === 'dic') {
@@ -118,7 +133,11 @@ export default {
       }
       return val[prop]
     },
-    // 获取除级联以外的数据
+    /**
+     * 获取除级联以外的数据
+     * val:
+     * data:
+     */
     getSelectData (val, data) {
       const dicData = data.dicData
       const value = this.getPropsName(data, 'value')
@@ -143,7 +162,11 @@ export default {
       }
       return arr.join(',')
     },
-    // 获取级联数据
+    /**
+     * 获取级联数据
+     * val:
+     * data:
+     */
     getCascader (val, data) {
       let arr = []
       const value = this.getPropsName(data, 'value')
@@ -162,7 +185,11 @@ export default {
         }
       }
     },
-    // 判断是否是级联数据
+    /**
+     * 判断是否是级联数据
+     * val:
+     * data:
+     */
     isCascader (val, data) {
       let is = false
       const dicData = data.dicData
