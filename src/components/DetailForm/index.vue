@@ -1,39 +1,65 @@
 <template>
-  <el-form
-    ref="form"
-    class="detail-container"
-    :label-width="option.labelWidth || '100px'">
+  <div class="detail-form-wrapper">
     <el-row>
-      <template v-for="item in option.column">
-        <el-col
-          :span="24 / (option.span || 1)"
-          v-if="item.show == null ? true : item.show"
-          :key="item.prop">
-          <el-form-item :label="item.label">
-            <template v-if="item.isTemplate">
-              <span class="text-wrapper ellipsis">
-                <slot :data="getTemplateData(data, item)" :name="item.prop"></slot>
-              </span>
-            </template>
-            <template v-else>
-              <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
-            </template>
-          </el-form-item>
+      <template v-for="data in option.option">
+        <h4 v-if="data.label">{{data.label}}</h4>
+        <el-col :span="24 / option.column">
+          <template v-for="item in data.column">
+            <div class="detail-form-item">
+              <div class="detail-form-label" :style="{'width': getLabelWidth(item)"></div>
+              <div class="detail-form-content">
+                <template v-if="item.slot">
+                  <span class="text-wrapper ellipsis">
+                    <slot :data="getTemplateData(data, item)" :name="item.prop"></slot>
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
+                </template>
+              </div>
+            </div>
+          </template>
         </el-col>
       </template>
     </el-row>
-  </el-form>
+  </div>
 </template>
 <script>
 export default {
-  name: 'govFormDetail',
+  name: 'DetailForm',
   props: {
-    // 参数
+    /**
+    {
+      labelWidth: '100px',
+      dicData: {},
+      column: 2,
+      option: [
+        {
+          label: '退款申请',
+          slot: false,
+          column: [
+            {
+              label: '姓名',
+              prop: 'name',
+              labelSlot: false,
+              slot: false,
+              dicData: data / 'name',
+              labelWidth: '100px',
+              type:'dic',
+              show: true,
+              props: {
+                label: 'name',
+                value: 'code'
+              },
+            }
+          ]
+        }
+      ]
+    }
+    */
     option: {
       type: Object,
-      default () {
-        return {}
-      }
+      default: () => {}
     },
     // 数据
     data: {
@@ -53,6 +79,17 @@ export default {
     }
   },
   methods: {
+    // 设置label宽度
+    getLabelWidth (data) {
+      let labelWidth = '100px'
+      if (this.option.labelWidth) {
+        labelWidth = this.option.labelWidth
+      }
+      if (data.labelWidth) {
+        labelWidth = data.labelWidth
+      }
+      return labelWidth
+    },
     // 获取自定义数据
     getTemplateData (val, data) {
       let obj = Object.assign({}, val)
@@ -146,19 +183,26 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.detail-container {
-  .text-wrapper {
-    display: block;
-    border: 1px solid #ddd;
-    padding: 0 10px;
-    height: 40px;
-    color: #666;
+<style scoped lang="scss">
+  .detail-form-wrapper {
+    .detail-form-item {
+      .detail-form-label {
+
+      }
+      .detail-form-content {
+        .text-wrapper {
+          display: block;
+          border: 1px solid #ddd;
+          padding: 0 10px;
+          height: 40px;
+          color: #666;
+        }
+        .ellipsis {
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
   }
-  .ellipsis {
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-  }
-}
 </style>
