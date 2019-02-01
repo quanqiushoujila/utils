@@ -7,40 +7,42 @@
         :key="index">
         {{options.label}}
       </h3>
-      <el-row :key="index + 1">
-        <el-col
-          :span="24 / (+option.column || 1)"
-          v-for="item in options.column"
-          :key="item.prop">
-          <div class="detail-form-item">
-            <div
-              class="detail-form-label"
-              :class="option.textAlign ? `text-${options.textAlign}` : 'text-right'"
-              :style="{'width': getLabelWidth(item)}">
-              <template v-if="item.slotLabel">
-                <slot :row="item" :name="`${item.prop}Label`"></slot>
-              </template>
-              <template v-else>
-                {{item.label}}
-              </template>
-              <el-tooltip class="item" effect="dark"  v-if="item.font" :content="item.content || ''" placement="bottom">
-                <i class="iconfont" :class="item.font" v-if="item.font"></i>
-              </el-tooltip>
+      <el-row :key="options.label">
+        <template v-for="item in options.column">
+          <el-col
+            :span="24 / (+option.column || 1)"
+            v-show="item.show == null ? (item.callback ? item.callback(data[item.prop]) : true) : item.show"
+            :key="item.prop">
+            <div class="detail-form-item">
+              <div
+                class="detail-form-label"
+                :class="option.textAlign ? `text-${options.textAlign}` : 'text-right'"
+                :style="{'width': getLabelWidth(item)}">
+                <template v-if="item.slotLabel">
+                  <slot :row="item" :name="`${item.prop}Label`"></slot>
+                </template>
+                <template v-else>
+                  {{item.label}}
+                </template>
+                <el-tooltip class="item" effect="dark"  v-if="item.font" :content="item.content || ''" placement="bottom">
+                  <i class="iconfont" :class="item.font" v-if="item.font"></i>
+                </el-tooltip>
+              </div>
+              <div
+                class="detail-form-content"
+                :style="{'margin-left': getLabelWidth(item)}">
+                <template v-if="item.slot">
+                  <span class="text-wrapper ellipsis">
+                    <slot :row="getTemplateData(data, item)" :name="item.prop"></slot>
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
+                </template>
+              </div>
             </div>
-            <div
-              class="detail-form-content"
-              :style="{'margin-left': getLabelWidth(item)}">
-              <template v-if="item.slot">
-                <span class="text-wrapper ellipsis">
-                  <slot :row="getTemplateData(data, item)" :name="item.prop"></slot>
-                </span>
-              </template>
-              <template v-else>
-                <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
-              </template>
-            </div>
-          </div>
-        </el-col>
+          </el-col>
+        </template>
       </el-row>
     </template>
   </div>

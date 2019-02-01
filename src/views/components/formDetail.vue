@@ -124,13 +124,6 @@ export default {
             label: '退款申请',
             column: [
               {
-                label: '姓名',
-                prop: 'name',
-                show: true,
-                slotLabel: true,
-                slot: true
-              },
-              {
                 label: '性别',
                 prop: 'sex',
                 type: 'dic',
@@ -141,7 +134,10 @@ export default {
                 dicData: [
                   {name: '男', id: 1},
                   {name: '女', id: 2}
-                ]
+                ],
+                callback: (row) => {
+                  return row === 2
+                }
               },
               {
                 label: '地址',
@@ -207,6 +203,18 @@ export default {
                     value: 3
                   }
                 ]
+              }
+            ]
+          },
+          {
+            label: '信息',
+            column: [
+              {
+                label: '姓名',
+                prop: 'name',
+                show: true,
+                slotLabel: true,
+                slot: true
               }
             ]
           }
