@@ -10,9 +10,9 @@
           v-if="item.show == null ? true : item.show"
           :key="item.prop">
           <el-form-item :label="item.label">
-            <template v-if="item.isTemplate">
+            <template v-if="item.slot">
               <span class="text-wrapper ellipsis">
-                <slot :data="getTemplateData(data, item)" :name="item.prop"></slot>
+                <slot :row="getTemplateData(data, item)" :name="item.prop"></slot>
               </span>
             </template>
             <template v-else>

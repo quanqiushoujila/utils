@@ -1,7 +1,7 @@
 import {getSessionStorage} from './storage'
 // 获取当前活动菜单
 export function activedMenu ({menu = {}, key = 'name', childrenName = 'children'}) {
-  const data = getSessionStorage({name: 'menu'})
+  const data = getSessionStorage({name: 'menu'}) || []
   if (Object.keys(menu).length === 0) {
     return {}
   }

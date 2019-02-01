@@ -7,8 +7,7 @@ export const setTheme = (name) => {
 /**
  * 设置浏览器头部标题
  */
-export const setTitle = function (title) {
-  title = title ? title : '标题'
+export const setTitle = function (title = '标题') {
   window.document.title = title
 }
 /**
@@ -86,7 +85,7 @@ export const resolveUrlPath = (url, name) => {
   let reqUrl = url
   if (url.indexOf('#') !== -1 && url.indexOf('http') === -1) {
     const port = reqUrl.substr(reqUrl.indexOf(':'))
-    reqUrl = `/iframe?src=${baseUrl}${port}${reqUrl.replace('#', '').replace(port, '')}}&name=${name}`
+    reqUrl = `/iframe?src=${port}${reqUrl.replace('#', '').replace(port, '')}}&name=${name}`
   } else if (url.indexOf('http') !== -1) {
     reqUrl = `/iframe?src=${reqUrl}&name=${name}`
   } else {

@@ -17,12 +17,13 @@ import '../static/tinymce4.7.5/skins/lightgray/content.min.css'
 import '../static/tinymce4.7.5/plugins/codesample/css/prism.css'
 import '@smallwei/avue/lib/theme-chalk/index.css'
 import '@/style/common.scss'
-
+import '@/config/font'
 Vue.use(viserVue)
 // require('@/mock')
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Avue)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

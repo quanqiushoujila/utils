@@ -1,27 +1,48 @@
 <template>
   <div class="detail-form-wrapper">
-    <el-row>
-      <template v-for="data in option.option">
-        <h4 v-if="data.label">{{data.label}}</h4>
-        <el-col :span="24 / option.column">
-          <template v-for="item in data.column">
-            <div class="detail-form-item">
-              <div class="detail-form-label" :style="{'width': getLabelWidth(item)"></div>
-              <div class="detail-form-content">
-                <template v-if="item.slot">
-                  <span class="text-wrapper ellipsis">
-                    <slot :data="getTemplateData(data, item)" :name="item.prop"></slot>
-                  </span>
-                </template>
-                <template v-else>
-                  <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
-                </template>
-              </div>
+    <template v-for="(options, index) in option.option">
+      <h3
+        class="detail-form-title"
+        v-if="options.label"
+        :key="index">
+        {{options.label}}
+      </h3>
+      <el-row :key="index + 1">
+        <el-col
+          :span="24 / (+option.column || 1)"
+          v-for="item in options.column"
+          :key="item.prop">
+          <div class="detail-form-item">
+            <div
+              class="detail-form-label"
+              :class="option.textAlign ? `text-${options.textAlign}` : 'text-right'"
+              :style="{'width': getLabelWidth(item)}">
+              <template v-if="item.slotLabel">
+                <slot :row="item" :name="`${item.prop}Label`"></slot>
+              </template>
+              <template v-else>
+                {{item.label}}
+              </template>
+              <el-tooltip class="item" effect="dark"  v-if="item.font" :content="item.content || ''" placement="bottom">
+                <i class="iconfont" :class="item.font" v-if="item.font"></i>
+              </el-tooltip>
             </div>
-          </template>
+            <div
+              class="detail-form-content"
+              :style="{'margin-left': getLabelWidth(item)}">
+              <template v-if="item.slot">
+                <span class="text-wrapper ellipsis">
+                  <slot :row="getTemplateData(data, item)" :name="item.prop"></slot>
+                </span>
+              </template>
+              <template v-else>
+                <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
+              </template>
+            </div>
+          </div>
         </el-col>
-      </template>
-    </el-row>
+      </el-row>
+    </template>
   </div>
 </template>
 <script>
@@ -33,6 +54,7 @@ export default {
       labelWidth: '100px',
       dicData: {},
       column: 2,
+      textAlign: 'right',
       option: [
         {
           label: '退款申请',
@@ -41,12 +63,14 @@ export default {
             {
               label: '姓名',
               prop: 'name',
-              labelSlot: false,
+              slotLabel: false,
               slot: false,
               dicData: data / 'name',
               labelWidth: '100px',
               type:'dic',
               show: true,
+              font: 'icon-iconfontquestion',
+              content: '提示',
               props: {
                 label: 'name',
                 value: 'code'
@@ -102,7 +126,11 @@ export default {
       let obj = Object.assign({}, val)
       obj.dicData = data.dicData
       const prop = data.prop
-      obj[`${prop}ForShow`] = this.realData(val, data)
+      let result = this.realData(val, data, '')
+      obj[`${prop}ForShow`] = result.arr
+      if (result.list) {
+        obj[`${prop}Data`] = result.list
+      }
       return obj
     },
     /**
@@ -118,14 +146,15 @@ export default {
      * val:
      * data:
      */
-    realData (val, data) {
+    realData (val, data, type = 'arr') {
       const prop = data.prop
       if (data.type === 'dic') {
         if (data.dicData) {
           if (this.isCascader(val, data)) {
             return this.getCascader(val[prop], data)
           } else {
-            return this.getSelectData(val[prop], data)
+            let result = this.getSelectData(val[prop], data)
+            return type === 'arr' ? result[type] : result
           }
         } else {
           return val[prop]
@@ -143,11 +172,14 @@ export default {
       const value = this.getPropsName(data, 'value')
       const label = this.getPropsName(data, 'label')
       let arr = []
-      if (Array.isArray(val)) {
+      let list = []
+      let isArray = Array.isArray(val)
+      if (isArray) {
         for (let j = 0, len1 = val.length; j < len1; j++) {
           for (let i = 0, len = dicData.length; i < len; i++) {
             if (val[j] === dicData[i][value]) {
               arr.push(dicData[i][label])
+              list.push(dicData[i])
               break
             }
           }
@@ -156,11 +188,12 @@ export default {
         for (let i = 0, len = dicData.length; i < len; i++) {
           if (dicData[i][value] === val) {
             arr.push(dicData[i][label])
+            list.push(dicData[i])
             break
           }
         }
       }
-      return arr.join(',')
+      return {arr: arr.join(','), list: isArray ? list : list[0]}
     },
     /**
      * 获取级联数据
@@ -212,11 +245,32 @@ export default {
 </script>
 <style scoped lang="scss">
   .detail-form-wrapper {
+    .detail-form-title {
+      line-height: 40px;
+      margin: 20px 0 10px;
+      font-weight: 500;
+      padding-left: 20px;
+      // border-top: 1px solid #d7d7d7;
+    }
     .detail-form-item {
+      line-height: 40px;
+      color: #606266;
+      margin-bottom: 20px;
       .detail-form-label {
-
+        float: left;
+        padding-right: 10px;
+        &.text-left {
+          text-align: left;
+        }
+        &.text-center {
+          text-align: center;
+        }
+        &.text-right {
+          text-align: right;
+        }
       }
       .detail-form-content {
+        box-sizing: border-box;
         .text-wrapper {
           display: block;
           border: 1px solid #ddd;
