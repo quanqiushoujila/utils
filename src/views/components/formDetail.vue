@@ -10,8 +10,9 @@
       </template>
     </gov-form-detail>
     <br>
-    <detail-form :data="data" :option="option2">
+    <detail-form v-model="data" :option="option2">
       <template slot="hobby" slot-scope="scope">
+        <!-- {{scope.row}} -->
         <el-tag v-for="item in scope.row.hobbyData" :key="item.value">{{item.label}}</el-tag>
       </template>
       <template slot="name" slot-scope="scope">
@@ -124,6 +125,8 @@ export default {
             label: '退款申请',
             column: [
               {
+                icon: 'icon-zhuanhuan',
+                content: '性别',
                 label: '性别',
                 prop: 'sex',
                 type: 'dic',
@@ -136,7 +139,7 @@ export default {
                   {name: '女', id: 2}
                 ],
                 callback: (row) => {
-                  return row === 2
+                  return row === 1
                 }
               },
               {
@@ -215,6 +218,11 @@ export default {
                 show: true,
                 slotLabel: true,
                 slot: true
+              },
+              {
+                label: '时间',
+                prop: 'time',
+                valueFormat: 'yyyy年MM月dd日 HH:mm分ss秒'
               }
             ]
           }

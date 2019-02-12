@@ -48,6 +48,12 @@ export default [
         label: '富文本',
         name: 'tinymce',
         path: '/components/tinymce'
+      },
+      {
+        id: 25,
+        label: 'slide',
+        name: 'slide',
+        path: '/components/slide'
       }
     ]
   },

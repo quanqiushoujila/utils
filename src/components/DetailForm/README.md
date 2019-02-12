@@ -53,3 +53,21 @@
 |slot|是否自定义|Boolean||false|
 |slotLabel|label是否自定义|Boolean||false|
 |callback|判断条件是否显示|Function(row){}|||
+
+>valueFormat
+
+|格式|含义|备注|举例|
+|:--:|:--:|:--:|:--:|
+|yyyy|年||2017|
+|M|月|不补 0|1|
+|MM|月||1|
+|d|日|不补 0|2|
+|dd|日||02|
+|H|小时|不补 0|3|
+|HH|小时||03|
+|m|分钟|不补 0|4|
+|mm|分钟||04|
+|s|秒|不补 0|5|
+|ss|秒||05|
+|timestamp|JS 时间戳|组件绑定值为number类型|1483326245000|
+

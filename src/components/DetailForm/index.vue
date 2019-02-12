@@ -10,8 +10,8 @@
       <el-row :key="options.label">
         <template v-for="item in options.column">
           <el-col
-            :span="24 / (+option.column || 1)"
-            v-show="item.show == null ? (item.callback ? item.callback(data[item.prop]) : true) : item.show"
+            :span="24 / ((item.span ? (24 / item.span) : false) || +option.column || 1)"
+            v-show="item.show == null ? (item.callback ? item.callback(value[item.prop]) : true) : item.show"
             :key="item.prop">
             <div class="detail-form-item">
               <div
@@ -24,8 +24,8 @@
                 <template v-else>
                   {{item.label}}
                 </template>
-                <el-tooltip class="item" effect="dark"  v-if="item.font" :content="item.content || ''" placement="bottom">
-                  <i class="iconfont" :class="item.font" v-if="item.font"></i>
+                <el-tooltip class="item" effect="dark"  v-if="item.icon" :content="item.content || ''" placement="bottom">
+                  <i class="iconfont" :class="item.icon" v-if="item.icon"></i>
                 </el-tooltip>
               </div>
               <div
@@ -33,11 +33,11 @@
                 :style="{'margin-left': getLabelWidth(item)}">
                 <template v-if="item.slot">
                   <span class="text-wrapper ellipsis">
-                    <slot :row="getTemplateData(data, item)" :name="item.prop"></slot>
+                    <slot :row="getTemplateData(value, item)" :name="item.prop"></slot>
                   </span>
                 </template>
                 <template v-else>
-                  <span class="text-wrapper ellipsis">{{realData(data, item)}}</span>
+                  <span class="text-wrapper ellipsis">{{item.valueFormat ? valueFormat(value[item.prop], item.valueFormat) : realData(value, item)}}</span>
                 </template>
               </div>
             </div>
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import {valueFormat} from './js/index'
 export default {
   name: 'DetailForm',
   props: {
@@ -88,7 +89,7 @@ export default {
       default: () => {}
     },
     // 数据
-    data: {
+    value: {
       type: Object,
       default () {
         return {}
@@ -105,6 +106,8 @@ export default {
     }
   },
   methods: {
+    // 时间过滤
+    valueFormat,
     /**
      * 设置label宽度
      * data: 当前条数据
