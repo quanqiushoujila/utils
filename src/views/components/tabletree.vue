@@ -8,7 +8,7 @@
       @handleUpdate="handleUpdate"
       :option="tableTree">
       <template slot-scope="scope" slot="sex">
-        <el-tag>{{scope.row.sexForShow}}</el-tag>
+        <el-tag>{{scope.row}}</el-tag>
       </template>
       <template slot-scope="scope" slot="operation">
         <el-button
@@ -33,8 +33,12 @@ export default {
       tableTree: {
         tree: {
           isLazyLoading: true
+          // url: '',
         },
         isSelection: true,
+        toggleCheckbox: () => {
+          return true
+        },
         props: [
           {label: 'id', prop: 'id', width: '50px'},
           {label: '姓名', prop: 'name', treeKey: true},

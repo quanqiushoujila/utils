@@ -5,7 +5,7 @@
       @size-change="sizeChange"
       @current-change="currentChange"
       :page="pagination"
-      :data="tableData"
+      :data="data"
       :option="column.tableProps">
       <template slot-scope="scope" slot="menu">
         <div class="table-btn-group">
@@ -13,37 +13,62 @@
         </div>
       </template>
     </avue-crud>
-    <k-dialog
+    <gov-dialog
       @closed="handleClosedDialog"
       @open="handleOpenDialog"
       @close="handleCloseDialog"
       @submit="handleSubmit"
-      ref="kdialog">
-    </k-dialog>
+      ref="govDialog">
+    </gov-dialog>
   </div>
 </template>
 <script>
-import mixin from '@/mixins/mixin'
-import kDialog from './dialog'
+import govDialog from './dialog'
+import {mergeWith} from 'lodash'
 export default {
-  name: 'kGroup',
-  mixins: [mixin],
-  components: {kDialog},
+  name: 'govGroup',
+  components: {govDialog},
+  props: {
+    // 分页
+    pagination: {
+      type: Object,
+      default: () => {}
+    },
+    // 列表数据
+    data: {
+      type: Array,
+      default: () => []
+    },
+    // 搜索参数
+    listQuery: {
+      type: Object,
+      default: () => {}
+    },
+    options: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       // 分页
-      pagination: {
+      govPagination: {
         currentPage: 1, // 当前页码
         pageSize: 10, // 显示多少条
         total: 0, // 总条数
         pageSizes: [10, 20, 30, 40, 50],
       },
-      // 列表数据
-      tableList: [],
       // 列表加载状态
       tableLoading: false,
-      // 搜索参数
-      listQuery: {},
+    }
+  },
+  watch: {
+    pagination: {
+      handler (newVal) {
+        this.govPagination = mergeWith(this.govPagination, newVal)
+      },
+      deep: true,
+      immediate: true
     }
   },
   computed: {

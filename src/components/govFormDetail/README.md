@@ -7,7 +7,7 @@
     <!--  自定义 -->
     <gov-form-detail :data="data" :option="option">
       <template slot="hobby" slot-scope="scope">
-        {{scope.data.hobbyForShow}}
+        {{scope.row.hobbyForShow}}
       </template>
     </gov-form-detail>
     <!-- 
@@ -31,6 +31,7 @@
 |参数|说明|类型|可选值|默认值|
 |:--:|--|--|:--:|:--:|
 |column|每列行数|Number||1|
+|labelWidth|label宽度|String|Number||100|
 |option|参数|Array|||
 
 >option-option参数
@@ -53,3 +54,4 @@
 |slot|是否自定义|Boolean||false|
 |slotLabel|label是否自定义|Boolean||false|
 |callback|判断条件是否显示|Function(row){}|||
+|span|表单栅列|Number||24|

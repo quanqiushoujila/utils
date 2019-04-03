@@ -4,6 +4,8 @@ import Detail from '@/views/components/formDetail'
 import Tinymce from '@/views/components/tinymce'
 import Pdf from '@/views/components/pdf'
 import Slide from '@/views/components/slide'
+import InputTree from '@/views/components/inputTree'
+import FormMarking from '@/views/components/formMarking'
 
 const componentsChildren = [
   { path: 'tabletree', name: 'tabletree', component: Tabletree, meta: {label: 'tabletree'} },
@@ -11,6 +13,8 @@ const componentsChildren = [
   { path: 'detail', name: 'detail', component: Detail, meta: {label: '詳情'} },
   { path: 'tinymce', name: 'tinymce', component: Tinymce, meta: {label: '富文本'} },
   { path: 'slide', name: 'slide', component: Slide, meta: {label: 'Slide'} },
-  { path: 'pdf', name: 'pdf', component: Pdf, meta: {label: 'pdf'} }
+  { path: 'pdf', name: 'pdf', component: Pdf, meta: {label: 'pdf'} },
+  { path: 'inputTree', name: 'inputTree', component: InputTree, meta: {label: 'inputTree'} },
+  { path: 'formMarking', name: 'formMarking', component: FormMarking, meta: {label: 'formMarking'} }
 ]
 export default componentsChildren

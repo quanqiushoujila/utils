@@ -54,6 +54,12 @@ export default [
         label: 'slide',
         name: 'slide',
         path: '/components/slide'
+      },
+      {
+        id: 26,
+        label: 'formMarking',
+        name: 'formMarking',
+        path: '/components/formMarking'
       }
     ]
   },

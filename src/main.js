@@ -18,6 +18,10 @@ import '../static/tinymce4.7.5/plugins/codesample/css/prism.css'
 import '@smallwei/avue/lib/theme-chalk/index.css'
 import '@/style/common.scss'
 import '@/config/font'
+import FormMaking from 'form-making'
+import 'form-making/dist/FormMaking.css'
+Vue.use(FormMaking)
+
 Vue.use(viserVue)
 // require('@/mock')
 Vue.config.productionTip = false

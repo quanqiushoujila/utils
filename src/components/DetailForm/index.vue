@@ -206,6 +206,9 @@ export default {
      * data:
      */
     getCascader (val, data) {
+      if (val == null) {
+        return ''
+      }
       let arr = []
       const value = this.getPropsName(data, 'value')
       const label = this.getPropsName(data, 'label')

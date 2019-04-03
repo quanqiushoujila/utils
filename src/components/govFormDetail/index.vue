@@ -71,7 +71,8 @@ export default {
       if (data.type === 'dic') {
         if (data.dicData) {
           if (this.isCascader(val, data)) {
-            return this.getCascader(val[prop], data)
+            console.log(111, val, prop, data)
+            return this.getCascader({val: val[prop], data})
           } else {
             return this.getSelectData(val[prop], data)
           }
@@ -107,7 +108,7 @@ export default {
       return arr.join(',')
     },
     // 获取级联数据
-    getCascader (val, data) {
+    getCascader ({val, data}) {
       let arr = []
       const value = this.getPropsName(data, 'value')
       const label = this.getPropsName(data, 'label')
@@ -116,6 +117,7 @@ export default {
       return arr.join('/')
     },
     getCascaderLoop ({arr, val, level, data, value, label, children}) {
+      console.log('val', val)
       for (let i = 0, len = data.length; i < len; i++) {
         if (data[i][value] === val[level]) {
           arr.push(data[i][label])

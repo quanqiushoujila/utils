@@ -11,7 +11,7 @@
     <form-layout>
       <template v-if="status === 'detail'">
         <div class="detail-wrapper">
-          <avue-form-detail v-model="formData" :option="column.detailOption"></avue-form-detail>
+          <gov-detail-form v-model="formData" :option="column.detailOption"></gov-detail-form>
         </div>
       </template>
       <template v-else>
@@ -23,9 +23,10 @@
 </template>
 <script>
 import govDialog from '@/components/govDialog'
+import govDetailForm from '@/componenets/govDetailForm'
 export default {
   name: 'dialog',
-  components: {govDialog},
+  components: {govDialog, govDetailForm},
   data () {
     return {
       avueOption: {},
