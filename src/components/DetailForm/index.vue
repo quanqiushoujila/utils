@@ -7,13 +7,14 @@
         :key="index">
         {{options.label}}
       </h3>
-      <el-row :key="options.label">
+      <el-row :key="options.label" :gutter="10">
         <template v-for="item in options.column">
           <el-col
             :span="24 / ((item.span ? (24 / item.span) : false) || +option.column || 1)"
             v-show="item.show == null ? (item.callback ? item.callback(value[item.prop]) : true) : item.show"
+
             :key="item.prop">
-            <div class="detail-form-item">
+            <div class="detail-form-item" >
               <div
                 class="detail-form-label"
                 :class="option.textAlign ? `text-${options.textAlign}` : 'text-right'"
@@ -24,7 +25,7 @@
                 <template v-else>
                   {{item.label}}
                 </template>
-                <el-tooltip class="item" effect="dark"  v-if="item.icon" :content="item.content || ''" placement="bottom">
+                <el-tooltip class="item" effect="dark" v-if="item.icon" :content="item.content || ''" placement="bottom">
                   <i class="iconfont" :class="item.icon" v-if="item.icon"></i>
                 </el-tooltip>
               </div>
@@ -32,7 +33,7 @@
                 class="detail-form-content"
                 :style="{'margin-left': getLabelWidth(item)}">
                 <template v-if="item.slot">
-                  <span class="text-wrapper ellipsis">
+                  <span class="text-wrapper ellipsis" :style="{'border-color': item.border == null ? '#ddd' : (item.border ? '#ddd' : '#fff'), 'height': item.autoHeight ? 'auto' : '40px'}">
                     <slot :row="getTemplateData(value, item)" :name="item.prop"></slot>
                   </span>
                 </template>
@@ -50,12 +51,11 @@
 <script>
 import {valueFormat} from './js/index'
 export default {
-  name: 'DetailForm',
+  name: 'GovDetailForm',
   props: {
     /**
     {
       labelWidth: '100px',
-      dicData: {},
       column: 2,
       textAlign: 'right',
       option: [
@@ -74,6 +74,7 @@ export default {
               show: true,
               font: 'icon-iconfontquestion',
               content: '提示',
+              span: 24,
               props: {
                 label: 'name',
                 value: 'code'
@@ -113,12 +114,12 @@ export default {
      * data: 当前条数据
      */
     getLabelWidth (data) {
-      let labelWidth = '100px'
+      let labelWidth = '150px'
       if (this.option.labelWidth) {
-        labelWidth = this.option.labelWidth
+        labelWidth = `${this.option.labelWidth}px`
       }
       if (data.labelWidth) {
-        labelWidth = data.labelWidth
+        labelWidth = `${data.labelWidth}px`
       }
       return labelWidth
     },
@@ -153,10 +154,10 @@ export default {
      */
     realData (val, data, type = 'arr') {
       const prop = data.prop
-      if (data.type === 'dic') {
+      if (data.type === 'dic' || data.dicData) {
         if (data.dicData) {
           if (this.isCascader(val, data)) {
-            return this.getCascader(val[prop], data)
+            return this.getCascader({val: val[prop], data})
           } else {
             let result = this.getSelectData(val[prop], data)
             return type === 'arr' ? result[type] : result
@@ -205,7 +206,7 @@ export default {
      * val:
      * data:
      */
-    getCascader (val, data) {
+    getCascader ({val, data}) {
       if (val == null) {
         return ''
       }
@@ -216,7 +217,7 @@ export default {
       this.getCascaderLoop({arr, val, level: 0, data: data.dicData, value, label, children})
       return arr.join('/')
     },
-    getCascaderLoop ({arr, val, level, data, value, label, children}) {
+    getCascaderLoop ({arr, val, level, data = [], value, label, children}) {
       for (let i = 0, len = data.length; i < len; i++) {
         if (data[i][value] === val[level]) {
           arr.push(data[i][label])

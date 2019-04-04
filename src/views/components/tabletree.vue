@@ -32,7 +32,8 @@ export default {
       tableTreeData: [],
       tableTree: {
         tree: {
-          isLazyLoading: true
+          isLazyLoading: true,
+          expanded: true
           // url: '',
         },
         isSelection: true,

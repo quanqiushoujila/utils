@@ -118,6 +118,7 @@
 import {mergeWith, isBoolean} from 'lodash'
 import $axios from 'axios'
 import {setTableTreeData, realData, getTemplateData} from './js/util'
+import {headers} from './js/header'
 export default {
   name: 'govTableTree',
   props: {
@@ -148,13 +149,17 @@ export default {
         loading: 'el-icon-loading'
       },
       table: {
+        headers: headers,
         border: true,
         tableParam: {
           total: 'total',
           data: 'data'
         },
+        setDataCallback: function (data) {
+          return data
+        },
         checkedAll: false,
-        toggleCheckbox: function (row, index) {
+        toggleCheckbox: function () {
           return true
         },
         defaultProps: {
@@ -356,7 +361,7 @@ export default {
       this.$emit('spanMethodHandle', row, column, rowIndex, columnIndex)
     },
     // 行的 style 的回调方法，
-    tableRowStyle ({row, rowIndex}) {
+    tableRowStyle ({row}) {
       // console.log(row)
       let show = this.getDefaultPropsName('show')
       return row[show] ? '' : 'display:none;'
@@ -455,17 +460,17 @@ export default {
     },
     // 获取ajax数据
     getData (row, index) {
-      let dataName = this.table.tableParam.data
       let loading = this.getDefaultPropsName('loading')
       let level = this.getDefaultPropsName('level')
       this.handleAjax({id: row.id}).then(({data}) => {
-        if (data.code === 0) {
-          let res = setTableTreeData({data: data[dataName], level: row[level] + 1, show: true})
-          let len = res.length
-          for (let i = len - 1; i >= 0; i--) {
-            this.tableData.splice(1 + index, 0, res[i])
-          }
+        // if (data.code === 0) {
+        typeof this.table.setDataCallback === 'function' && Array.isArray(this.table.setDataCallback(data)) && (data = [].concat(this.table.setDataCallback(data)))
+        let res = setTableTreeData({data: data, level: row[level] + 1, show: true})
+        let len = res.length
+        for (let i = len - 1; i >= 0; i--) {
+          this.tableData.splice(1 + index, 0, res[i])
         }
+        // }
         row[loading] = false
       })
     },
@@ -502,6 +507,7 @@ export default {
       // })
 
       return $axios({
+        headers: this.table.headers || {},
         url: this.table.tree.url,
         method: this.table.tree.method || 'get',
         params: params
