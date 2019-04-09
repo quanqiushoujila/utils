@@ -1,5 +1,5 @@
 <template>
-  <div v-show="options.show">
+  <div v-show="show">
     <el-popover
     v-model="options.visible"
     placement="bottom-start"
@@ -12,15 +12,21 @@
         :highlight-current="true"
         :default-expand-all="true"
         :expand-on-click-node="false"
-        :data="options.tree.data"
-        :ref="options.prop + 'Tree'"
+        :data="tree.data"
+        :ref="prop + 'Tree'"
         :props="data.defaultProps || defaultProps"/>
     </div>
     <el-input
       v-model="model"
       readonly
+      :disabled="disabled"
+      v-if="!multiple"
       slot="reference"
-      :placeholder="options.input.placeholder"></el-input>
+      :placeholder="placeholder"></el-input>
+    <div
+      slot="reference">
+      多选
+    </div>
   </el-popover>
 </div>
 </template>
@@ -28,6 +34,10 @@
 export default {
   name: 'SelectTree',
   props: {
+    show: {
+      type: Boolean,
+      default: true
+    },
     option: {
       type: Object,
       default: () => {}
@@ -56,19 +66,12 @@ export default {
   data () {
     return {
       model: '',
-      options: {
-        show: true,
-        visible: true,
-        input: {
-          placeholder: '请选择'
-        },
-        tree: {
-          data: [],
-          nodeKey: 'id',
-          defaultProps: {
-            children: 'children',
-            label: 'label'
-          }
+      tree: {
+        data: [],
+        nodeKey: 'id',
+        defaultProps: {
+          children: 'children',
+          label: 'label'
         }
       }
     }

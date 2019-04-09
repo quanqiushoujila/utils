@@ -60,6 +60,24 @@ export default [
         label: 'formMarking',
         name: 'formMarking',
         path: '/components/formMarking'
+      },
+      {
+        id: 27,
+        label: 'wangeditor',
+        name: 'wangeditor',
+        path: '/components/wangeditor'
+      },
+      {
+        id: 28,
+        label: 'neditorWrap',
+        name: 'neditorWrap',
+        path: '/components/neditorWrap'
+      },
+      {
+        id: 29,
+        label: 'myNeditorWrap',
+        name: 'myNeditorWrap',
+        path: '/components/myNeditorWrap'
       }
     ]
   },
