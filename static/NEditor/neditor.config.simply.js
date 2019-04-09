@@ -59,17 +59,6 @@
           'removeformat', //清除格式
           'insertrow', //前插入行
           'insertcol', //前插入列
-          'mergeright', //右合并单元格
-          'mergedown', //下合并单元格
-          'deleterow', //删除行
-          'deletecol', //删除列
-          'splittorows', //拆分成行
-          'splittocols', //拆分成列
-          'splittocells', //完全拆分单元格
-          'deletecaption', //删除表格标题
-          'inserttitle', //插入标题
-          'mergecells', //合并多个单元格
-          'deletetable', //删除表格
           'insertparagraphbeforetable', //"表格前插入行"
           'fontfamily', //字体
           'fontsize', //字号
@@ -89,6 +78,11 @@
           'imagecenter', //居中
           'lineheight', //行间距
           'customstyle', //自定义标题
+          'inserttable', //插入表格
+          'insertrow', //前插入行
+          'insertcol', //前插入列
+          'deleterow', //删除行
+          'deletecol', //删除列
         ]
       ]
       //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
