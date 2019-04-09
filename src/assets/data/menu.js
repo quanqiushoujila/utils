@@ -78,6 +78,12 @@ export default [
         label: 'myNeditorWrap',
         name: 'myNeditorWrap',
         path: '/components/myNeditorWrap'
+      },
+      {
+        id: 200,
+        label: 'selectTree',
+        name: 'selectTree',
+        path: '/components/selectTree'
       }
     ]
   },
