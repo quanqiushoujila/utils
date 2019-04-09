@@ -26,11 +26,31 @@
 </template>
 <script>
 export default {
-  name: 'InputTree',
+  name: 'SelectTree',
   props: {
     option: {
       type: Object,
       default: () => {}
+    },
+    // 是否禁用
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    // 是否多选
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    // 单选时是否可以清空选项
+    clearable: {
+      type: Boolean,
+      default: false
+    },
+    // 占位符
+    placeholder: {
+      type: String,
+      default: '请选择'
     }
   },
   data () {
