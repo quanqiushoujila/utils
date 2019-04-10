@@ -23,6 +23,7 @@
       <el-input
         v-model="model"
         readonly
+        clearable
         :disabled="disabled"
         slot="reference"
         :placeholder="placeholder">
