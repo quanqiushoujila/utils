@@ -3,7 +3,6 @@
     <select-tree
       v-model="model"
       :treeOption="treeOption"
-      @getValue="getValue"
       :tree-data="data">
     </select-tree>
     <br>
